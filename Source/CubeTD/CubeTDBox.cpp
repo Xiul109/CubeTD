@@ -16,6 +16,9 @@ ACubeTDBox::ACubeTDBox()
 	//Main Mesh
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MainMesh"));
 	Mesh->AttachToComponent(Root, FAttachmentTransformRules::KeepRelativeTransform);
+	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	CollisionEnabledHasPhysics(ECollisionEnabled::NoCollision);
 }
 
 // Called when the game starts or when spawned

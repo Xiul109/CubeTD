@@ -18,6 +18,7 @@ ACubeTDArena::ACubeTDArena(): Subdivisions(3)
 	Arm->AttachToComponent(Root, FAttachmentTransformRules::KeepRelativeTransform);
 	Arm->bUsePawnControlRotation = true;
 	Arm->TargetArmLength = 300;
+	Arm->bDoCollisionTest = false;
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->AttachToComponent(Arm, FAttachmentTransformRules::KeepRelativeTransform);
@@ -71,17 +72,26 @@ void ACubeTDArena::OnConstruction(const FTransform & Transform)
 		UChildActorComponent* AuxActor;
 		auto Root = GetRootComponent();
 
-		auto AuxActorInstance = NewObject<ACubeTDBox>(this, BoxClass);
-		UStaticMeshComponent* AuxActorMesh = AuxActorInstance->Mesh;
+		//Mesh size of each Box
+		auto AuxBoxInstance = NewObject<ACubeTDBox>(this, BoxClass);
+		UStaticMeshComponent* AuxBoxMesh = AuxBoxInstance->Mesh;
 		FVector Min, Max;
-		AuxActorMesh->GetLocalBounds(Min, Max);
-		AuxActorInstance->Destroy();
+		AuxBoxMesh->GetLocalBounds(Min, Max);
+		AuxBoxInstance->Destroy();
+		FVector BoxDims = Max-Min;
+		float BoxMeshSize = BoxDims.GetMax();
 
-		//Falta Adaptar el tamaño al cubo interior
-		FVector MeshDims = Max-Min;
-		float MeshSize = MeshDims.GetMax();
-		FVector IntDims = FVector(Size, Size, Size);
-		FVector Origin = MeshDims * (IntDims - 1) / 2;
+		//Obtaining the new Scale for the boxes
+		MainMesh->GetLocalBounds(Min, Max);
+		FVector MainMeshDims = Max - Min;
+		float MainMeshSize = MainMeshDims.GetMax();
+		float NewBoxScale = (MainMeshSize/Subdivisions)/BoxMeshSize;
+		FVector RealBoxDims = BoxDims * NewBoxScale;
+		float RealBoxSize = BoxMeshSize * NewBoxScale;
+
+		//Getting the origin point to place each actor correctly
+		FVector ArenaDims = FVector(Size);
+		FVector Origin = RealBoxDims * (ArenaDims - 1) / 2;
 
 		for (int i = 0; i < Size; i++) {
 			for (int j = 0; j < Size; j++) {
@@ -89,13 +99,14 @@ void ACubeTDArena::OnConstruction(const FTransform & Transform)
 					if (IsOuter(i, j, k)) {
 						FName Name = FName(*FString::Printf(TEXT("Box_%d_%d_%d"), i, j, k));
 						AuxActor = NewObject<UChildActorComponent>(this, Name);
+						AuxActor->SetRelativeScale3D(FVector(NewBoxScale));
 						AuxActor->AttachToComponent(Root, FAttachmentTransformRules::KeepRelativeTransform);
 
 						AuxActor->CreationMethod = EComponentCreationMethod::UserConstructionScript;
 
 						AuxActor->SetChildActorClass(BoxClass);
 
-						FVector Offset = FVector(i * MeshSize, j * MeshSize, k * MeshSize) - Origin;
+						FVector Offset = FVector(i * RealBoxSize, j * RealBoxSize, k * RealBoxSize) - Origin;
 						AuxActor->AddRelativeLocation(Offset);
 					}
 				}
