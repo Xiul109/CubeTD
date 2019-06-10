@@ -2,6 +2,9 @@
 
 #include "CubeTDGameModeBase.h"
 
+#include "CubeTDPlayerController.h"
 
-
+ACubeTDGameModeBase::ACubeTDGameModeBase() {
+	PlayerControllerClass = ACubeTDPlayerController::StaticClass();
+}
 

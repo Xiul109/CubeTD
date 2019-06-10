@@ -14,7 +14,8 @@ class CUBETD_API ACubeTDGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
-	
+public:
+	ACubeTDGameModeBase();
 	
 	
 };

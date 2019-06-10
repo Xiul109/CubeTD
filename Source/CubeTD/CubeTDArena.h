@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "CubeTDBox.h"
+#include "ArenaData.h"
 
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -35,6 +36,9 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settigns")
 	TSubclassOf<ACubeTDBox> BoxClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UArenaData* ArenaData;
 
 protected:
 	// Called when the game starts or when spawned

@@ -69,8 +69,10 @@ void ACubeTDArena::OnConstruction(const FTransform & Transform)
 
 	if (BoxClass) {
 		int Size = Subdivisions + 2;
-		UChildActorComponent* AuxActor;
-		auto Root = GetRootComponent();
+
+		//Init Arena Data
+		ArenaData = NewObject<UArenaData>(this);
+		ArenaData->Size = Size;
 
 		//Mesh size of each Box
 		auto AuxBoxInstance = NewObject<ACubeTDBox>(this, BoxClass);
@@ -97,17 +99,27 @@ void ACubeTDArena::OnConstruction(const FTransform & Transform)
 			for (int j = 0; j < Size; j++) {
 				for (int k = 0; k < Size; k++) {
 					if (IsOuter(i, j, k)) {
+						FVector Position = FVector(i, j, k);
 						FName Name = FName(*FString::Printf(TEXT("Box_%d_%d_%d"), i, j, k));
-						AuxActor = NewObject<UChildActorComponent>(this, Name);
-						AuxActor->SetRelativeScale3D(FVector(NewBoxScale));
-						AuxActor->AttachToComponent(Root, FAttachmentTransformRules::KeepRelativeTransform);
 
+						//Creating and attaching the object
+						UChildActorComponent* AuxActor = NewObject<UChildActorComponent>(this, Name);
+						AuxActor->AttachToComponent(MainMesh, FAttachmentTransformRules::KeepRelativeTransform);
+
+						//Creating the Box itself
 						AuxActor->CreationMethod = EComponentCreationMethod::UserConstructionScript;
-
 						AuxActor->SetChildActorClass(BoxClass);
+						AuxActor->CreateChildActor();
 
-						FVector Offset = FVector(i * RealBoxSize, j * RealBoxSize, k * RealBoxSize) - Origin;
+						//Moving and resizing the box
+						FVector Offset = Position*RealBoxSize - Origin;
 						AuxActor->AddRelativeLocation(Offset);
+						AuxActor->SetRelativeScale3D(FVector(NewBoxScale));
+
+						//Inluding the object into the arena
+						ACubeTDBox* AuxBox = Cast<ACubeTDBox>(AuxActor->GetChildActor());
+						AuxBox->Position = Position;
+						ArenaData->Boxes.Add(Position, AuxBox);
 					}
 				}
 			}

@@ -21,6 +21,15 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* Mesh;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool Navigable;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool Interactionable;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FVector Position;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
