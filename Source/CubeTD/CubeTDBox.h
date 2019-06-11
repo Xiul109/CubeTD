@@ -28,7 +28,10 @@ public:
 	bool Interactionable;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	FVector Position;
+	FIntVector Position;
+
+	UFUNCTION()
+	bool IsNavigable() const;
 
 protected:
 	// Called when the game starts or when spawned

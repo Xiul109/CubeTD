@@ -12,6 +12,18 @@
 /**
  * 
  */
+
+UENUM()
+enum class EFaceEnum : int8
+{
+	X0   = -1,
+	XMax = 1,
+	Y0 = -2,
+	YMax = 2,
+	Z0 = -3,
+	ZMax = 3
+};
+
 UCLASS()
 class CUBETD_API UArenaData : public UObject
 {
@@ -21,18 +33,31 @@ public:
 	UArenaData();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TMap<FVector, ACubeTDBox*> Boxes;
+	TMap<FIntVector, ACubeTDBox*> Boxes;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int Size;
 
-	TArray<ACubeTDBox*> GetAdjacentBoxesTo(FVector Position);
-	float GetDistance(FVector V1, FVector V2);
+	TArray<EFaceEnum> GetFacesOf(FIntVector Position) const;
+	float GetNearestPointInFace(FIntVector Position, EFaceEnum Face, FIntVector &NearestPoint) const;
+	TArray<ACubeTDBox*> GetAllNeighbours(FIntVector Position) const;
+	float GetDistance(FIntVector V1, FIntVector V2) const;
+	bool IsOuter(FIntVector Position) const;
+
+	bool FindPath(FIntVector Origin, FIntVector End,TArray<FVector> &Path) const;
+	TArray<FVector> PostProcessPath(TArray<FIntVector> Path) const;
+
+	//////////////////////////////////////////////////////////////////////////
+	// FGraphAStar: TGraph
+	typedef FIntVector FNodeRef;
+
+	int32 GetNeighbourCount(FNodeRef NodeRef) const;
+	bool IsValidRef(FNodeRef NodeRef) const;
+	FNodeRef GetNeighbour(const FNodeRef NodeRef, const int32 NeiIndex) const;
+	//////////////////////////////////////////////////////////////////////////
 
 private:
-	TArray<FVector> AdjacentDisplacements;
+	TArray<FIntVector> AdjacentDisplacements;
 
-	bool AreInOppositeFace(FVector V1, FVector V2);
-
-	float ManhattanSize(FVector Vector);
+	float ManhattanSize(FIntVector Vector) const;
 };

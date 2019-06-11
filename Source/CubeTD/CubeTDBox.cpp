@@ -4,7 +4,7 @@
 
 
 // Sets default values
-ACubeTDBox::ACubeTDBox()
+ACubeTDBox::ACubeTDBox() : Navigable(true)
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -19,6 +19,11 @@ ACubeTDBox::ACubeTDBox()
 	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	CollisionEnabledHasPhysics(ECollisionEnabled::NoCollision);
+}
+
+bool ACubeTDBox::IsNavigable() const
+{
+	return Navigable;
 }
 
 // Called when the game starts or when spawned

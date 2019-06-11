@@ -36,16 +36,6 @@ void ACubeTDArena::BeginPlay()
 	
 }
 
-bool ACubeTDArena::IsOuter(int i, int j, int k)
-{
-	int Size = Subdivisions + 2;
-	bool iOuter = i == 0 || i == Size - 1;
-	bool jOuter = j == 0 || j == Size - 1;
-	bool kOuter = k == 0 || k == Size - 1;
-
-	return iOuter || jOuter || kOuter;
-}
-
 // Called every frame
 void ACubeTDArena::Tick(float DeltaTime)
 {
@@ -98,11 +88,10 @@ void ACubeTDArena::OnConstruction(const FTransform & Transform)
 		for (int i = 0; i < Size; i++) {
 			for (int j = 0; j < Size; j++) {
 				for (int k = 0; k < Size; k++) {
-					if (IsOuter(i, j, k)) {
-						FVector Position = FVector(i, j, k);
-						FName Name = FName(*FString::Printf(TEXT("Box_%d_%d_%d"), i, j, k));
-
+					FIntVector Position = FIntVector(i, j, k);
+					if (ArenaData->IsOuter(Position)) {
 						//Creating and attaching the object
+						FName Name = FName(*FString::Printf(TEXT("Box_%d_%d_%d"), i, j, k));
 						UChildActorComponent* AuxActor = NewObject<UChildActorComponent>(this, Name);
 						AuxActor->AttachToComponent(MainMesh, FAttachmentTransformRules::KeepRelativeTransform);
 
@@ -112,7 +101,7 @@ void ACubeTDArena::OnConstruction(const FTransform & Transform)
 						AuxActor->CreateChildActor();
 
 						//Moving and resizing the box
-						FVector Offset = Position*RealBoxSize - Origin;
+						FVector Offset = FVector(Position)*RealBoxSize - Origin;
 						AuxActor->AddRelativeLocation(Offset);
 						AuxActor->SetRelativeScale3D(FVector(NewBoxScale));
 
