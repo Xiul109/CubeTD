@@ -2,6 +2,7 @@
 
 #include "CubeTDArena.h"
 
+#include "Engine/World.h"
 #include "Components/InputComponent.h"
 
 // Sets default values
@@ -33,7 +34,63 @@ ACubeTDArena::ACubeTDArena(): Subdivisions(3)
 void ACubeTDArena::BeginPlay()
 {
 	Super::BeginPlay();
+	UpdatePath();
 	
+	SpawnSplineFollowers();
+}
+
+bool ACubeTDArena::UpdatePath()
+{
+	if (EnemiesPath)
+		EnemiesPath->UnregisterComponent();
+
+	if (ArenaData) {
+		if (ArenaData->IsOuter(Origin) && ArenaData->IsOuter(Destination)) {
+			TArray<FVector> PathPoints;
+			if (ArenaData->FindPath(Origin, Destination, PathPoints)) {
+				EnemiesPath = NewObject<USplineComponent>(this);
+				EnemiesPath->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+				EnemiesPath->RegisterComponent();
+				
+				EnemiesPath->RemoveSplinePoint(0);
+				EnemiesPath->RemoveSplinePoint(0);
+				for (FVector Point : PathPoints) {
+					EnemiesPath->AddSplinePoint(Point,ESplineCoordinateSpace::World);
+				}
+				EnemiesPath->bDrawDebug = true;
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+void ACubeTDArena::SpawnSplineFollowers()
+{
+	auto World = GetWorld();
+	if (SplineFollowerClass && World && EnemiesPath && ArenaData) {
+		int FollowersToSpawn = EnemiesPath->GetNumberOfSplinePoints();
+		float DistanceIncrement = EnemiesPath->GetSplineLength() / FollowersToSpawn;
+		for (int i = 0; i < FollowersToSpawn; i++) {
+			ASplineFollower* SplineFollower = World->SpawnActor<ASplineFollower>(SplineFollowerClass);
+			SplineFollower->SplineRef = EnemiesPath;
+			SplineFollower->PositionInSpline = i * DistanceIncrement;
+			
+			FVector SpawnScale = (*ArenaData->Boxes.Find(FIntVector(0)))->GetActorScale3D();
+			SplineFollower->SetActorScale3D(SpawnScale);
+
+
+			SplineFollowersSpawned.Add(SplineFollower);
+		}		
+	}
+}
+
+void ACubeTDArena::ClearSplineFollowers()
+{
+	for (ASplineFollower* Follower : SplineFollowersSpawned) {
+		Follower->Destroy();
+	}
+	SplineFollowersSpawned.Empty();
 }
 
 // Called every frame
@@ -41,6 +98,7 @@ void ACubeTDArena::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	
 }
 
 // Called to bind functionality to input
@@ -77,9 +135,9 @@ void ACubeTDArena::OnConstruction(const FTransform & Transform)
 		MainMesh->GetLocalBounds(Min, Max);
 		FVector MainMeshDims = Max - Min;
 		float MainMeshSize = MainMeshDims.GetMax();
-		float NewBoxScale = (MainMeshSize/Subdivisions)/BoxMeshSize;
-		FVector RealBoxDims = BoxDims * NewBoxScale;
-		float RealBoxSize = BoxMeshSize * NewBoxScale;
+		float BoxScale = (MainMeshSize/Subdivisions)/BoxMeshSize;
+		FVector RealBoxDims = BoxDims * BoxScale;
+		float RealBoxSize = BoxMeshSize * BoxScale;
 
 		//Getting the origin point to place each actor correctly
 		FVector ArenaDims = FVector(Size);
@@ -103,7 +161,7 @@ void ACubeTDArena::OnConstruction(const FTransform & Transform)
 						//Moving and resizing the box
 						FVector Offset = FVector(Position)*RealBoxSize - Origin;
 						AuxActor->AddRelativeLocation(Offset);
-						AuxActor->SetRelativeScale3D(FVector(NewBoxScale));
+						AuxActor->SetRelativeScale3D(FVector(BoxScale));
 
 						//Inluding the object into the arena
 						ACubeTDBox* AuxBox = Cast<ACubeTDBox>(AuxActor->GetChildActor());

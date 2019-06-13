@@ -6,8 +6,10 @@
 
 #include "CubeTDBox.h"
 #include "ArenaData.h"
+#include "SplineFollower.h"
 
 #include "Components/StaticMeshComponent.h"
+#include "Components/SplineComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 
@@ -27,22 +29,38 @@ public:
 	USpringArmComponent* Arm;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UCameraComponent* Camera;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* MainMesh;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	USplineComponent* EnemiesPath;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settigns")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
 	int Subdivisions;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settigns")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
 	TSubclassOf<ACubeTDBox> BoxClass;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
+	TSubclassOf<ASplineFollower> SplineFollowerClass;
+
+
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UArenaData* ArenaData;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arena Settings")
+	FIntVector Origin;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arena Settings")
+	FIntVector Destination;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	virtual bool UpdatePath();
+
+	TArray<ASplineFollower*> SplineFollowersSpawned;
+
+	void SpawnSplineFollowers();
+	void ClearSplineFollowers();
 
 public:	
 	// Called every frame
