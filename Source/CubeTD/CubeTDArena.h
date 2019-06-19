@@ -16,10 +16,13 @@
 #include "GameFramework/Pawn.h"
 #include "CubeTDArena.generated.h"
 
+
 UCLASS()
 class CUBETD_API ACubeTDArena : public APawn
 {
 	GENERATED_BODY()
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPathBlockedDelegate);
 
 public:
 	// Sets default values for this pawn's properties
@@ -43,7 +46,6 @@ public:
 	TSubclassOf<ASplineFollower> SplineFollowerClass;
 
 
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UArenaData* ArenaData;
 
@@ -51,6 +53,11 @@ public:
 	FIntVector Origin;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arena Settings")
 	FIntVector Destination;
+
+	//Delegates
+	UPROPERTY(BlueprintAssignable)
+	FPathBlockedDelegate OnPathBlocked;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -58,9 +65,15 @@ protected:
 	virtual bool UpdatePath();
 
 	TArray<ASplineFollower*> SplineFollowersSpawned;
+	UPROPERTY()
+	ACubeTDBox* SelectedBox;
 
 	void SpawnSplineFollowers();
 	void ClearSplineFollowers();
+
+	//Functions for delegates
+	UFUNCTION()
+	void BoxPreUpdated(ACubeTDBox* Box);
 
 public:	
 	// Called every frame
@@ -71,4 +84,7 @@ public:
 
 	
 	virtual void OnConstruction(const FTransform & Transform) override;
+
+	UFUNCTION(BlueprintCallable)
+	ACubeTDBox* GetSelectedBox() const;
 };

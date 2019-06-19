@@ -37,6 +37,12 @@ void ACubeTDArena::BeginPlay()
 	UpdatePath();
 	
 	SpawnSplineFollowers();
+
+	//Box Update Delegates
+	for (auto Box : ArenaData->Boxes) {
+		Box.Value->OnBoxPreUpdated.AddDynamic(this, &ACubeTDArena::BoxPreUpdated);
+		Box.Value->OnBoxSelected.AddDynamic(this, &ACubeTDArena::BoxPreUpdated);
+	}
 }
 
 bool ACubeTDArena::UpdatePath()
@@ -92,6 +98,21 @@ void ACubeTDArena::ClearSplineFollowers()
 	}
 	SplineFollowersSpawned.Empty();
 }
+
+void ACubeTDArena::BoxPreUpdated(ACubeTDBox* Box)
+{
+	if (UpdatePath()) {
+		ClearSplineFollowers();
+		SpawnSplineFollowers();
+		Box->UpdateBox();
+	}
+	else {
+		OnPathBlocked.Broadcast();
+		Box->Navigable = true;
+		Box->CancelUpdate();
+	}
+}
+
 
 // Called every frame
 void ACubeTDArena::Tick(float DeltaTime)
@@ -173,5 +194,10 @@ void ACubeTDArena::OnConstruction(const FTransform & Transform)
 		}
 		RegisterAllComponents();
 	}
+}
+
+ACubeTDBox * ACubeTDArena::GetSelectedBox() const
+{
+	return SelectedBox;
 }
 

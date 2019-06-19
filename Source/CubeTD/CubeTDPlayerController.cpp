@@ -5,5 +5,7 @@
 
 ACubeTDPlayerController::ACubeTDPlayerController() {
 	bShowMouseCursor = true;
+	bEnableMouseOverEvents = true;
+	bEnableClickEvents = true;
 }
 
