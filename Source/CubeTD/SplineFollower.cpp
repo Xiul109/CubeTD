@@ -10,10 +10,6 @@ ASplineFollower::ASplineFollower(): Speed(50), PositionInSpline(0)
 	auto Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	SetRootComponent(Root);
 
-	//Main Mesh
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MainMesh"));
-	Mesh->AttachToComponent(Root, FAttachmentTransformRules::KeepRelativeTransform);
-
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 }
