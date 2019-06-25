@@ -1,12 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "CubeTDBox.h"
+#include "Engine/World.h"
+#include "Components/InputComponent.h"
 
 
 // Sets default values
 ACubeTDBox::ACubeTDBox() : Navigable(true), Interactionable(true), ContainsStructure(false), Selected(false), NeedsUpdate(false)
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	auto Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
@@ -35,6 +37,10 @@ void ACubeTDBox::DestroyStructure()
 	Navigable = true;
 
 	OnBoxPreUpdated.Broadcast(this);
+
+	ContainsStructure = false;
+
+	Tower->Destroy();
 }
 
 void ACubeTDBox::BuildStructure()
@@ -44,10 +50,29 @@ void ACubeTDBox::BuildStructure()
 	Navigable = false;
 
 	OnBoxPreUpdated.Broadcast(this);
+
+	if (!Navigable) {
+		auto World = GetWorld();
+		ABasicTower* newTower = World->SpawnActor<ABasicTower>(ABasicTower::StaticClass());
+		FVector SpawnScale = (this->GetActorScale3D());
+		newTower->SetActorScale3D(SpawnScale);
+		FVector SpawnLocation = (this)->GetActorLocation();
+		newTower->SetActorLocation(SpawnLocation);
+		Tower = newTower;
+		ContainsStructure = true;
+	}
 }
 
 void ACubeTDBox::UpgradeStructure()
 {
+	Tower->Destroy();
+	auto World = GetWorld();
+	AShootingTower* newTower = World->SpawnActor<AShootingTower>(AShootingTower::StaticClass());
+	FVector SpawnScale = (this->GetActorScale3D());
+	newTower->SetActorScale3D(SpawnScale);
+	FVector SpawnLocation = (this)->GetActorLocation();
+	newTower->SetActorLocation(SpawnLocation);
+	Tower = Cast<ABasicTower>(newTower);
 }
 
 void ACubeTDBox::UpdateBox()
@@ -62,7 +87,7 @@ void ACubeTDBox::CancelUpdate()
 	Navigable = true;
 	Selected = false;
 
-	if(ErrorMaterial)
+	if (ErrorMaterial)
 		Mesh->SetMaterial(0, ErrorMaterial);
 }
 
@@ -72,7 +97,7 @@ void ACubeTDBox::BeginPlay()
 	Super::BeginPlay();
 
 	Mesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	
+
 }
 
 void ACubeTDBox::OnBeginMouseOver(UPrimitiveComponent * TouchedComponent)
@@ -97,23 +122,25 @@ void ACubeTDBox::OnEndMouseOver(UPrimitiveComponent * TouchedComponent)
 void ACubeTDBox::OnMouseClicked(UPrimitiveComponent * TouchedComponent, FKey key)
 {
 	if (Interactionable) {
+		//TODO interfaz elegir opciones
 		if (!Selected) {
 			Selected = true;
-			
-			if (UsedMaterial) 
-				Mesh->SetMaterial(0, UsedMaterial);
 
+			if (UsedMaterial)
+				Mesh->SetMaterial(0, UsedMaterial);
 			BuildStructure();
 		}
-		else {
-			Selected = false;
-			
-			if (DefaultMaterial) 
+		else if (ContainsStructure) {
+			/*Selected = false;
+
+			if (DefaultMaterial)
 				Mesh->SetMaterial(0, DefaultMaterial);
 
 			DestroyStructure();
+			*/
+			UpgradeStructure();
 		}
-		
+
 	}
 }
 
@@ -123,4 +150,3 @@ void ACubeTDBox::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-

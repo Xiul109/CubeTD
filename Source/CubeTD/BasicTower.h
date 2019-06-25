@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/StaticMeshComponent.h"
 #include "BasicTower.generated.h"
 
 UCLASS()
@@ -15,6 +16,9 @@ public:
 	// Sets default values for this actor's properties
 	ABasicTower();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		UStaticMeshComponent* Mesh;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -23,4 +27,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	
+	
 };

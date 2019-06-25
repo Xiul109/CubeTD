@@ -7,6 +7,8 @@
 #include "Components/StaticMeshComponent.h"
 
 #include "GameFramework/Actor.h"
+#include "BasicTower.h"
+#include "ShootingTower.h"
 #include "CubeTDBox.generated.h"
 
 
@@ -14,42 +16,45 @@ UCLASS()
 class CUBETD_API ACubeTDBox : public AActor
 {
 	GENERATED_BODY()
-	
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBoxDelegate, ACubeTDBox*, Box);
-	
-public:	
+
+		DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBoxDelegate, ACubeTDBox*, Box);
+
+public:
 	// Sets default values for this actor's properties
 	ACubeTDBox();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UStaticMeshComponent* Mesh;
+		UStaticMeshComponent* Mesh;
 
 	UPROPERTY(EditAnywhere)
-	UMaterialInterface* DefaultMaterial;
+		UMaterialInterface* DefaultMaterial;
 	UPROPERTY(EditAnywhere)
-	UMaterialInterface* HoverMaterial;
+		UMaterialInterface* HoverMaterial;
 	UPROPERTY(EditAnywhere)
-	UMaterialInterface* UsedMaterial;
+		UMaterialInterface* UsedMaterial;
 	UPROPERTY(EditAnywhere)
-	UMaterialInterface* ErrorMaterial;
+		UMaterialInterface* ErrorMaterial;
 
-	//Update Params
+	UPROPERTY()
+		ABasicTower* Tower;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
+		TSubclassOf<ABasicTower> TowerClass;
 
 
 	//Navigation Params
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool Navigable;
+		bool Navigable;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool ContainsStructure;
+		bool ContainsStructure;
 
 	//UI Params
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
-	bool Interactionable;
+		bool Interactionable;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
-	bool Selected;
+		bool Selected;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	FIntVector Position;
+		FIntVector Position;
 
 	//Delegates
 	FBoxDelegate OnBoxPreUpdated;
@@ -61,32 +66,31 @@ protected:
 
 	//Functions for delegates
 	UFUNCTION()
-	void OnBeginMouseOver(UPrimitiveComponent* TouchedComponent);
+		void OnBeginMouseOver(UPrimitiveComponent* TouchedComponent);
 	UFUNCTION()
-	void OnEndMouseOver(UPrimitiveComponent* TouchedComponent);
+		void OnEndMouseOver(UPrimitiveComponent* TouchedComponent);
 	UFUNCTION()
-	void OnMouseClicked(UPrimitiveComponent* TouchedComponent, FKey Key);
-
+		void OnMouseClicked(UPrimitiveComponent* TouchedComponent, FKey Key);
 	//Hidden attributes
 	bool NeedsUpdate;
 
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-	bool IsNavigable() const;
-	
-	UFUNCTION(BlueprintCallable)
-	void DestroyStructure();
-	UFUNCTION(BlueprintCallable)
-	void BuildStructure();
-	UFUNCTION(BlueprintCallable)
-	void UpgradeStructure();
+		bool IsNavigable() const;
 
 	UFUNCTION(BlueprintCallable)
-	void UpdateBox();
+		void DestroyStructure();
 	UFUNCTION(BlueprintCallable)
-	void CancelUpdate();
+		void BuildStructure();
+	UFUNCTION(BlueprintCallable)
+		void UpgradeStructure();
+
+	UFUNCTION(BlueprintCallable)
+		void UpdateBox();
+	UFUNCTION(BlueprintCallable)
+		void CancelUpdate();
 };
