@@ -14,7 +14,20 @@ class CUBETD_API ADivisibleEnemy : public ABaseEnemy
 {
 	GENERATED_BODY()
 	
+public:
+	ADivisibleEnemy();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Divisible Enemy")
+	int SubdivisionsLeft;
 	
-	
-	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Divisible Enemy")
+	float StatChangingRatio;
+
+protected:
+	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	virtual void OnKilled(AActor* Actor);
+
+	ADivisibleEnemy* CreateDividedEnemy();
 };

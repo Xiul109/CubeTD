@@ -18,9 +18,14 @@ public:
 	ABaseEnemy();
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base Enemy")
+	float MaxLife;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base Enemy")
 	float Life;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base Enemy")
 	float Damage;
+
+	virtual void OnConstruction(const FTransform & Transform) override;
 };

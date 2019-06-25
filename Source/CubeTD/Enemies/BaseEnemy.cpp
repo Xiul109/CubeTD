@@ -3,4 +3,11 @@
 #include "BaseEnemy.h"
 
 
-ABaseEnemy::ABaseEnemy() :Life(100), Damage(1) {}
+ABaseEnemy::ABaseEnemy() : MaxLife(100), Damage(1) {}
+
+void ABaseEnemy::OnConstruction(const FTransform & Transform)
+{
+	Super::OnConstruction(Transform);
+
+	Life = MaxLife;
+}
