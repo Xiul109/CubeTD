@@ -32,4 +32,12 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Turret Projectiles")
 		TSubclassOf<class AProjectile> ProjectileClass;
+	
+	float CoolDown;
+	float AccumulatedDeltaTime;
+
+public:
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
 };

@@ -15,6 +15,8 @@ AShootingTower::AShootingTower()
 	ProjectileClass = BPProjectile.Class;
 
 	CollisionComp->OnComponentBeginOverlap.AddDynamic(this, &AShootingTower::BeginOverlap);
+	
+	CoolDown = 2.f;
 
 }
 
@@ -23,7 +25,7 @@ void AShootingTower::BeginOverlap(UPrimitiveComponent * OverlappedComponent, AAc
 	class ASplineFollower* Enemy= Cast<ASplineFollower>(OtherActor);
 	auto World = GetWorld();
 	//Spawn proyectil
-	if (Enemy!=nullptr)
+	if (Enemy!=nullptr && AccumulatedDeltaTime >= CoolDown)
 	{
 		if (World != NULL)
 		{
@@ -45,7 +47,15 @@ void AShootingTower::BeginOverlap(UPrimitiveComponent * OverlappedComponent, AAc
 				meshRot.Yaw = 0.f;
 				FiredProjectile->ProjectileMesh->SetRelativeRotation(meshRot);
 				FiredProjectile->Target=Enemy;
+				AccumulatedDeltaTime = 0.0f;
 			}
 		}
 	}
+}
+void AShootingTower::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	AccumulatedDeltaTime += DeltaTime;
+			
 }
