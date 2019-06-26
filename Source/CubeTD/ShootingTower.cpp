@@ -8,9 +8,14 @@ AShootingTower::AShootingTower()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	//const ConstructorHelpers::FObjectFinder<UStaticMesh> MeshObj(TEXT("StaticMesh'/Game/Meshes/Shape_Cone.Shape_Cone'"));
+	//Mesh->SetStaticMesh(MeshObj.Object);
+	CollisionComp = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionComp"));
+	const ConstructorHelpers::FClassFinder<AProjectile> BPProjectile(TEXT("Blueprint'/Game/Blueprints/ProjectileBP'"));
+	ProjectileClass = BPProjectile.Class;
 
-	const ConstructorHelpers::FObjectFinder<UStaticMesh> MeshObj(TEXT("StaticMesh'/Game/Meshes/Shape_Cone.Shape_Cone'"));
-	Mesh->SetStaticMesh(MeshObj.Object);
+	CollisionComp->OnComponentBeginOverlap.AddDynamic(this, &AShootingTower::BeginOverlap);
+
 }
 
 void AShootingTower::BeginOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)

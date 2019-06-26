@@ -38,7 +38,10 @@ public:
 	UPROPERTY()
 		ABasicTower* Tower;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
-		TSubclassOf<ABasicTower> TowerClass;
+		TSubclassOf<ABasicTower> BasicTowerClass;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
+		TSubclassOf<ABasicTower> ShootingTowerClass;
+
 
 
 	//Navigation Params

@@ -15,8 +15,8 @@ ABasicTower::ABasicTower()
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MainMesh"));
 	Mesh->AttachToComponent(Root, FAttachmentTransformRules::KeepRelativeTransform);
-	const ConstructorHelpers::FObjectFinder<UStaticMesh> MeshObj(TEXT("StaticMesh'/Game/Meshes/Sphere.Sphere'"));
-	Mesh->SetStaticMesh(MeshObj.Object);
+	// ConstructorHelpers::FObjectFinder<UStaticMesh> MeshObj(TEXT("StaticMesh'/Game/Meshes/Sphere.Sphere'"));
+	//Mesh->SetStaticMesh(MeshObj.Object);
 }
 
 // Called when the game starts or when spawned

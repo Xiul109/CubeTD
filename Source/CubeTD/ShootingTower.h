@@ -18,6 +18,9 @@ class CUBETD_API AShootingTower : public ABasicTower
 public:
 	AShootingTower();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
+		class UBoxComponent* CollisionComp;
+
 	UFUNCTION()
 		void BeginOverlap(UPrimitiveComponent* OverlappedComponent,
 			AActor* OtherActor,

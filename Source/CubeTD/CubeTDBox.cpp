@@ -22,6 +22,12 @@ ACubeTDBox::ACubeTDBox() : Navigable(true), Interactionable(true), ContainsStruc
 	Mesh->OnBeginCursorOver.AddDynamic(this, &ACubeTDBox::OnBeginMouseOver);
 	Mesh->OnEndCursorOver.AddDynamic(this, &ACubeTDBox::OnEndMouseOver);
 	Mesh->OnClicked.AddDynamic(this, &ACubeTDBox::OnMouseClicked);
+
+	const ConstructorHelpers::FClassFinder<ABasicTower> BPBasic(TEXT("Blueprint'/Game/Blueprints/BasicTowerBP'"));
+	BasicTowerClass = BPBasic.Class;
+	const ConstructorHelpers::FClassFinder<ABasicTower> BPShooting(TEXT("Blueprint'/Game/Blueprints/ShootingTowerBP'"));
+	ShootingTowerClass = BPShooting.Class;
+
 }
 
 bool ACubeTDBox::IsNavigable() const
@@ -53,7 +59,8 @@ void ACubeTDBox::BuildStructure()
 
 	if (!Navigable) {
 		auto World = GetWorld();
-		ABasicTower* newTower = World->SpawnActor<ABasicTower>(ABasicTower::StaticClass());
+
+		ABasicTower* newTower = World->SpawnActor<ABasicTower>(BasicTowerClass);
 		FVector SpawnScale = (this->GetActorScale3D());
 		newTower->SetActorScale3D(SpawnScale);
 		FVector SpawnLocation = (this)->GetActorLocation();
@@ -67,7 +74,9 @@ void ACubeTDBox::UpgradeStructure()
 {
 	Tower->Destroy();
 	auto World = GetWorld();
-	AShootingTower* newTower = World->SpawnActor<AShootingTower>(AShootingTower::StaticClass());
+	
+
+	AShootingTower* newTower = World->SpawnActor<AShootingTower>(ShootingTowerClass);
 	FVector SpawnScale = (this->GetActorScale3D());
 	newTower->SetActorScale3D(SpawnScale);
 	FVector SpawnLocation = (this)->GetActorLocation();

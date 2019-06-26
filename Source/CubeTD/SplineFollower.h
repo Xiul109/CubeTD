@@ -6,7 +6,6 @@
 
 #include "Components/SplineComponent.h"
 #include "Components/StaticMeshComponent.h"
-
 #include "GameFramework/Actor.h"
 #include "SplineFollower.generated.h"
 

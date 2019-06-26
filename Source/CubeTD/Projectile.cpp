@@ -16,25 +16,24 @@ AProjectile::AProjectile()
 
 	auto Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	SetRootComponent(Root);
-	// Construct Collision Component
+	
 	CollisionComp = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionComp"));
-	// Construct Static Mesh Component
+
 	ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ProjectileMesh"));
-	const ConstructorHelpers::FObjectFinder<UStaticMesh> MeshObj(TEXT("StaticMesh'/Game/Meshes/Sphere.Sphere'"));
-	ProjectileMesh->SetStaticMesh(MeshObj.Object);
+	//const ConstructorHelpers::FObjectFinder<UStaticMesh> MeshObj(TEXT("StaticMesh'/Game/Meshes/Sphere.Sphere'"));
+	//ProjectileMesh->SetStaticMesh(MeshObj.Object);
 	ProjectileMesh->SetupAttachment(RootComponent);
 
 	// Construct Projectile Movement Component
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
 	ProjectileMovement->UpdatedComponent = CollisionComp;
-	ProjectileMovement->InitialSpeed = 200.f;
+	ProjectileMovement->InitialSpeed = 2.f;
 	ProjectileMovement->MaxSpeed = 300.f;
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bInitialVelocityInLocalSpace = true;
 	ProjectileMovement->bShouldBounce = false;
 	ProjectileMovement->bIsHomingProjectile = false;
 	ProjectileMovement->HomingAccelerationMagnitude = 0.f;
-	ProjectileMovement->ProjectileGravityScale = 0.f;
 	ProjectileMovement->Velocity = FVector(0, 0, 0);
 
 	// Bind our OnOverlapBegin Event
@@ -58,9 +57,9 @@ void AProjectile::Tick(float DeltaTime)
 		if (Target->IsValidLowLevel())
 		{
 			FVector wantedDir = (Target->GetActorLocation() - GetActorLocation()).GetSafeNormal();
-			wantedDir += Target->GetVelocity() * wantedDir.Size() / 200.f;
-			ProjectileMovement->Velocity += wantedDir * 200.f * DeltaTime;
-			ProjectileMovement->Velocity = ProjectileMovement->Velocity.GetSafeNormal() * 200.f;
+			wantedDir += Target->GetVelocity() * wantedDir.Size() / 2.f;
+			ProjectileMovement->Velocity += wantedDir * 2.f * DeltaTime;
+			ProjectileMovement->Velocity = ProjectileMovement->Velocity.GetSafeNormal() * 2.f;
 		}
 		else
 		{
