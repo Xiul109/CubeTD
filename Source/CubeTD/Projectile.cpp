@@ -27,8 +27,8 @@ AProjectile::AProjectile()
 	// Construct Projectile Movement Component
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovement"));
 	ProjectileMovement->UpdatedComponent = CollisionComp;
-	ProjectileMovement->InitialSpeed = 200.f;
-	ProjectileMovement->MaxSpeed = 300.f;
+	ProjectileMovement->InitialSpeed = 300.f;
+	ProjectileMovement->MaxSpeed = 500.f;
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bInitialVelocityInLocalSpace = true;
 	ProjectileMovement->bShouldBounce = false;
@@ -44,34 +44,29 @@ AProjectile::AProjectile()
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-
+	FindTarget();
 }
 
 // Called every frame
 void AProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	FindTarget();
+}
 
+void AProjectile::FindTarget() {
 	if (Target != NULL)
 	{
 		if (Target->IsValidLowLevel())
 		{
-			FVector wantedDir = (Target->GetActorLocation() - GetActorLocation()).GetSafeNormal();
-			wantedDir += Target->GetVelocity() * wantedDir.Size() / 2.f;
-			ProjectileMovement->Velocity += wantedDir * 2.f * DeltaTime;
-			ProjectileMovement->Velocity = ProjectileMovement->Velocity.GetSafeNormal() * 2.f;
-		}
-		else
-		{
-			if (!this->IsPendingKill())
-				if (this->IsValidLowLevel())
-					K2_DestroyActor();
+			FVector wantedDir = (Target->GetActorLocation() - GetActorLocation());
+			ProjectileMovement->Velocity = wantedDir;
+			ProjectileMovement->UpdateComponentVelocity();
 		}
 	}
 	else {
 		Explode();
 	}
-
 }
 
 

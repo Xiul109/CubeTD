@@ -2,7 +2,6 @@
 
 #include "BasicTower.h"
 #include "PhysicsEngine/PhysicsAsset.h"
-#include "ConstructorHelpers.h"
 
 // Sets default values
 ABasicTower::ABasicTower()
@@ -12,7 +11,8 @@ ABasicTower::ABasicTower()
 
 	auto Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	SetRootComponent(Root);
-
+	//CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionComp"));
+	//CollisionComp->SetSphereRadius(240);
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MainMesh"));
 	Mesh->AttachToComponent(Root, FAttachmentTransformRules::KeepRelativeTransform);
 	// ConstructorHelpers::FObjectFinder<UStaticMesh> MeshObj(TEXT("StaticMesh'/Game/Meshes/Sphere.Sphere'"));

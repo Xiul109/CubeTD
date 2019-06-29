@@ -41,6 +41,8 @@ public:
 		TSubclassOf<ABasicTower> BasicTowerClass;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
 		TSubclassOf<ABasicTower> ShootingTowerClass;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
+		TSubclassOf<ABasicTower> AoeTowerClass;
 
 
 

@@ -18,8 +18,8 @@ class CUBETD_API AShootingTower : public ABasicTower
 public:
 	AShootingTower();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
-		class UBoxComponent* CollisionComp;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Collision")
+		class USphereComponent* CollisionComp;
 
 	UFUNCTION()
 		void BeginOverlap(UPrimitiveComponent* OverlappedComponent,
@@ -32,6 +32,9 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Turret Projectiles")
 		TSubclassOf<class AProjectile> ProjectileClass;
+
+	UPROPERTY(EditAnywhere)
+		ASplineFollower* Target;
 	
 	float CoolDown;
 	float AccumulatedDeltaTime;

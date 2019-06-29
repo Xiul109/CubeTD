@@ -16,7 +16,7 @@ public:
 	// Sets default values for this actor's properties
 	ABasicTower();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		UStaticMeshComponent* Mesh;
 
 protected:

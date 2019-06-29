@@ -23,11 +23,6 @@ ACubeTDBox::ACubeTDBox() : Navigable(true), Interactionable(true), ContainsStruc
 	Mesh->OnEndCursorOver.AddDynamic(this, &ACubeTDBox::OnEndMouseOver);
 	Mesh->OnClicked.AddDynamic(this, &ACubeTDBox::OnMouseClicked);
 
-	const ConstructorHelpers::FClassFinder<ABasicTower> BPBasic(TEXT("Blueprint'/Game/Blueprints/BasicTowerBP'"));
-	BasicTowerClass = BPBasic.Class;
-	const ConstructorHelpers::FClassFinder<ABasicTower> BPShooting(TEXT("Blueprint'/Game/Blueprints/ShootingTowerBP'"));
-	ShootingTowerClass = BPShooting.Class;
-
 }
 
 bool ACubeTDBox::IsNavigable() const
@@ -75,7 +70,6 @@ void ACubeTDBox::UpgradeStructure()
 	Tower->Destroy();
 	auto World = GetWorld();
 	
-
 	AShootingTower* newTower = World->SpawnActor<AShootingTower>(ShootingTowerClass);
 	FVector SpawnScale = (this->GetActorScale3D());
 	newTower->SetActorScale3D(SpawnScale);

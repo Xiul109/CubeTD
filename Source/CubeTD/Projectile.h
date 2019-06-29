@@ -43,13 +43,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void FindTarget();
+
 	UFUNCTION()
 		void OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &hitResult);
 
-private:
-	//CAMBIAR A CLASE ENEMIGO CUANDO SE IMPLEMENTE.
-
 	void Explode();
+	
 };
 
 
