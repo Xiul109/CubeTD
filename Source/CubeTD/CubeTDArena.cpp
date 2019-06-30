@@ -108,7 +108,6 @@ void ACubeTDArena::BoxPreUpdated(ACubeTDBox* Box)
 	}
 	else {
 		OnPathBlocked.Broadcast();
-		Box->Navigable = true;
 		Box->CancelUpdate();
 	}
 }

@@ -36,13 +36,13 @@ void AShootingTower::Tick(float DeltaTime)
 					FVector currentPos = GetActorLocation();
 					FRotator currentRot = FRotator(0, 0, 0);
 
-					/*FActorSpawnParameters spawnParams;
+					FActorSpawnParameters spawnParams;
 					spawnParams.Owner = this;
 					spawnParams.Instigator = Instigator;
 
-					class AProjectile* FiredProjectile = World->SpawnActor<AProjectile>(ProjectileClass, currentPos, currentRot, spawnParams);*/
+					//AProjectile* FiredProjectile = World->SpawnActor<AProjectile>(ProjectileClass, currentPos, currentRot, spawnParams);
 
-					class AProjectile* FiredProjectile = World->SpawnActor<AProjectile>(ProjectileClass, currentPos, currentRot);
+					AProjectile* FiredProjectile = World->SpawnActor<AProjectile>(ProjectileClass);
 
 					if (FiredProjectile != nullptr)
 					{

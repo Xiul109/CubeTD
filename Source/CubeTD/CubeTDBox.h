@@ -7,8 +7,7 @@
 #include "Components/StaticMeshComponent.h"
 
 #include "GameFramework/Actor.h"
-#include "BasicTower.h"
-#include "ShootingTower.h"
+#include "BasicStructure.h"
 #include "CubeTDBox.generated.h"
 
 
@@ -36,21 +35,13 @@ public:
 		UMaterialInterface* ErrorMaterial;
 
 	UPROPERTY()
-		ABasicTower* Tower;
+		ABasicStructure* Structure;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
-		TSubclassOf<ABasicTower> BasicTowerClass;
+		TSubclassOf<ABasicStructure> BasicTowerClass;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
-		TSubclassOf<ABasicTower> ShootingTowerClass;
+		TSubclassOf<ABasicStructure> ShootingTowerClass;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
-		TSubclassOf<ABasicTower> AoeTowerClass;
-
-
-
-	//Navigation Params
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool Navigable;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool ContainsStructure;
+		TSubclassOf<ABasicStructure> AoeTowerClass;
 
 	//UI Params
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")

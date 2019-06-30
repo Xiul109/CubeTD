@@ -6,7 +6,7 @@
 
 
 // Sets default values
-ACubeTDBox::ACubeTDBox() : Navigable(true), Interactionable(true), ContainsStructure(false), Selected(false), NeedsUpdate(false)
+ACubeTDBox::ACubeTDBox() : Interactionable(true), Selected(false), NeedsUpdate(false)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -27,7 +27,11 @@ ACubeTDBox::ACubeTDBox() : Navigable(true), Interactionable(true), ContainsStruc
 
 bool ACubeTDBox::IsNavigable() const
 {
-	return Navigable;
+	bool ret = true;
+	if (Structure != nullptr) {
+		ret = Structure->Navigable;
+	}
+	return ret;
 }
 
 
@@ -35,47 +39,41 @@ void ACubeTDBox::DestroyStructure()
 {
 	NeedsUpdate = true;
 
-	Navigable = true;
-
 	OnBoxPreUpdated.Broadcast(this);
 
-	ContainsStructure = false;
+	Structure->Destroy();
 
-	Tower->Destroy();
+	Structure = nullptr;
 }
 
 void ACubeTDBox::BuildStructure()
 {
 	NeedsUpdate = true;
 
-	Navigable = false;
-
-	OnBoxPreUpdated.Broadcast(this);
-
-	if (!Navigable) {
 		auto World = GetWorld();
-
-		ABasicTower* newTower = World->SpawnActor<ABasicTower>(BasicTowerClass);
+		ABasicStructure* newStructure = World->SpawnActor<ABasicStructure>(BasicTowerClass);
 		FVector SpawnScale = (this->GetActorScale3D());
-		newTower->SetActorScale3D(SpawnScale);
+		newStructure->SetActorScale3D(SpawnScale);
 		FVector SpawnLocation = (this)->GetActorLocation();
-		newTower->SetActorLocation(SpawnLocation);
-		Tower = newTower;
-		ContainsStructure = true;
+		newStructure->SetActorLocation(SpawnLocation);
+		Structure = newStructure;
+	
+	OnBoxPreUpdated.Broadcast(this);
+	if (!Selected) {
+		DestroyStructure();
 	}
 }
 
 void ACubeTDBox::UpgradeStructure()
 {
-	Tower->Destroy();
+	Structure->Destroy();
 	auto World = GetWorld();
-	
-	AShootingTower* newTower = World->SpawnActor<AShootingTower>(ShootingTowerClass);
+	ABasicStructure* newStructure = World->SpawnActor<ABasicStructure>(ShootingTowerClass);
 	FVector SpawnScale = (this->GetActorScale3D());
-	newTower->SetActorScale3D(SpawnScale);
+	newStructure->SetActorScale3D(SpawnScale);
 	FVector SpawnLocation = (this)->GetActorLocation();
-	newTower->SetActorLocation(SpawnLocation);
-	Tower = Cast<ABasicTower>(newTower);
+	newStructure->SetActorLocation(SpawnLocation);
+	Structure = Cast<ABasicStructure>(newStructure);
 }
 
 void ACubeTDBox::UpdateBox()
@@ -87,11 +85,11 @@ void ACubeTDBox::CancelUpdate()
 {
 	NeedsUpdate = false;
 
-	Navigable = true;
 	Selected = false;
 
 	if (ErrorMaterial)
 		Mesh->SetMaterial(0, ErrorMaterial);
+
 }
 
 // Called when the game starts or when spawned
@@ -126,14 +124,13 @@ void ACubeTDBox::OnMouseClicked(UPrimitiveComponent * TouchedComponent, FKey key
 {
 	if (Interactionable) {
 		//TODO interfaz elegir opciones
-		if (!Selected) {
-			Selected = true;
-
+		Selected = true;
+		if (Structure==nullptr) {
 			if (UsedMaterial)
 				Mesh->SetMaterial(0, UsedMaterial);
 			BuildStructure();
 		}
-		else if (ContainsStructure) {
+		else{
 			/*Selected = false;
 
 			if (DefaultMaterial)
