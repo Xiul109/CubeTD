@@ -33,15 +33,19 @@ public:
 		UMaterialInterface* UsedMaterial;
 	UPROPERTY(EditAnywhere)
 		UMaterialInterface* ErrorMaterial;
+	UPROPERTY(EditAnywhere)
+		UMaterialInterface* DisabledMaterial;
 
 	UPROPERTY()
 		ABasicStructure* Structure;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
 		TSubclassOf<ABasicStructure> BasicTowerClass;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
 		TSubclassOf<ABasicStructure> ShootingTowerClass;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
 		TSubclassOf<ABasicStructure> AoeTowerClass;
+
 
 	//UI Params
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
@@ -89,4 +93,6 @@ public:
 		void UpdateBox();
 	UFUNCTION(BlueprintCallable)
 		void CancelUpdate();
+	UFUNCTION(BlueprintCallable)
+		void Disable();
 };

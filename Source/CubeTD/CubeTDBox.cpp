@@ -92,6 +92,14 @@ void ACubeTDBox::CancelUpdate()
 
 }
 
+void ACubeTDBox::Disable()
+{
+	Interactionable = false;
+
+	if(DisabledMaterial)
+		Mesh->SetMaterial(0, DisabledMaterial);
+}
+
 // Called when the game starts or when spawned
 void ACubeTDBox::BeginPlay()
 {

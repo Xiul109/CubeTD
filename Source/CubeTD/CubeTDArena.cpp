@@ -38,6 +38,23 @@ void ACubeTDArena::BeginPlay()
 	
 	SpawnSplineFollowers();
 
+	//Prepare Origin and End Boxes
+	ACubeTDBox* OriginBox = *ArenaData->Boxes.Find(Origin);
+	ACubeTDBox* DestinationBox = *ArenaData->Boxes.Find(Destination);
+
+	OriginBox->Disable(); DestinationBox->Disable();
+
+	auto World = GetWorld();
+	if (World) {
+		if (SpawnerClass)
+			OriginBox->Structure = World->SpawnActor<ABasicStructure>(SpawnerClass, OriginBox->GetActorTransform());
+		if(NexusClass)
+			DestinationBox->Structure = World->SpawnActor<ABasicStructure>(NexusClass, DestinationBox->GetActorTransform());
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Origin Navigable: %d"), OriginBox->Structure->Navigable);
+	UE_LOG(LogTemp, Warning, TEXT("Destination Navigable: %d"), DestinationBox->Structure->Navigable);
+
 	//Box Update Delegates
 	for (auto Box : ArenaData->Boxes) {
 		Box.Value->OnBoxPreUpdated.AddDynamic(this, &ACubeTDArena::BoxPreUpdated);

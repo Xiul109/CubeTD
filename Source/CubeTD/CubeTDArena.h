@@ -8,10 +8,15 @@
 #include "ArenaData.h"
 #include "SplineFollower.h"
 
+#include "Structures/Spawner.h"
+#include "Structures/Nexus.h"
+
 #include "Components/StaticMeshComponent.h"
 #include "Components/SplineComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+
+#include "Engine/DataTable.h"
 
 #include "GameFramework/Pawn.h"
 #include "CubeTDArena.generated.h"
@@ -49,10 +54,20 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UArenaData* ArenaData;
 
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arena Settings")
 	FIntVector Origin;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arena Settings")
 	FIntVector Destination;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
+	TSubclassOf<ASpawner> SpawnerClass;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
+	TSubclassOf<ANexus> NexusClass;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arena Settings")
+	TArray<UDataTable*> RoundsSpawnsData;
 
 	//Delegates
 	UPROPERTY(BlueprintAssignable)
