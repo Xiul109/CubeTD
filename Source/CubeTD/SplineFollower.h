@@ -18,17 +18,14 @@ public:
 	// Sets default values for this actor's properties
 	ASplineFollower();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UStaticMeshComponent* Mesh;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spline Following")
 	USplineComponent* SplineRef;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spline Following")
-	float Speed;
+	float PositionInSpline;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spline Following")
-	float PositionInSpline;
+	float Speed;
 
 protected:
 	// Called when the game starts or when spawned
@@ -38,7 +35,4 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	
-	
 };
