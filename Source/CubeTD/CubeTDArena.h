@@ -65,9 +65,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
 	TSubclassOf<ANexus> NexusClass;
 
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int Rounds;	//	->	This counter starts at 1 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arena Settings")
 	TArray<UDataTable*> RoundsSpawnsData;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	ACubeTDBox* SelectedBox;
 
 	//Delegates
 	UPROPERTY(BlueprintAssignable)
@@ -80,8 +84,6 @@ protected:
 	virtual bool UpdatePath();
 
 	TArray<ASplineFollower*> SplineFollowersSpawned;
-	UPROPERTY()
-	ACubeTDBox* SelectedBox;
 
 	void SpawnSplineFollowers();
 	void ClearSplineFollowers();
@@ -89,6 +91,12 @@ protected:
 	//Functions for delegates
 	UFUNCTION()
 	void BoxPreUpdated(ACubeTDBox* Box);
+	UFUNCTION()
+	void BoxSelected(ACubeTDBox* Box);
+	UFUNCTION()
+	void BoxDeselected(ACubeTDBox* Box);
+
+	void RoundFinished();
 
 public:	
 	// Called every frame
@@ -102,4 +110,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	ACubeTDBox* GetSelectedBox() const;
+
+	UFUNCTION(BlueprintCallable)
+	void StartNewRound();
+
+	UFUNCTION(BlueprintCallable)
+	void SetBoxesEnabled(bool Enabled);
 };

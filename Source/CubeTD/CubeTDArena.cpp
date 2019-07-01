@@ -6,7 +6,7 @@
 #include "Components/InputComponent.h"
 
 // Sets default values
-ACubeTDArena::ACubeTDArena(): Subdivisions(3)
+ACubeTDArena::ACubeTDArena(): Subdivisions(3), Rounds(0)
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -52,13 +52,11 @@ void ACubeTDArena::BeginPlay()
 			DestinationBox->Structure = World->SpawnActor<ABasicStructure>(NexusClass, DestinationBox->GetActorTransform());
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("Origin Navigable: %d"), OriginBox->Structure->Navigable);
-	UE_LOG(LogTemp, Warning, TEXT("Destination Navigable: %d"), DestinationBox->Structure->Navigable);
-
 	//Box Update Delegates
 	for (auto Box : ArenaData->Boxes) {
 		Box.Value->OnBoxPreUpdated.AddDynamic(this, &ACubeTDArena::BoxPreUpdated);
-		Box.Value->OnBoxSelected.AddDynamic(this, &ACubeTDArena::BoxPreUpdated);
+		Box.Value->OnBoxSelected.AddDynamic(this, &ACubeTDArena::BoxSelected);
+		Box.Value->OnBoxDeselected.AddDynamic(this, &ACubeTDArena::BoxDeselected);
 	}
 }
 
@@ -127,6 +125,25 @@ void ACubeTDArena::BoxPreUpdated(ACubeTDBox* Box)
 		OnPathBlocked.Broadcast();
 		Box->CancelUpdate();
 	}
+}
+
+void ACubeTDArena::BoxSelected(ACubeTDBox * Box)
+{
+	if (Box != SelectedBox) {
+		if(SelectedBox)
+			SelectedBox->Deselect();
+		SelectedBox = Box;
+	}
+}
+
+void ACubeTDArena::BoxDeselected(ACubeTDBox * Box)
+{
+	if (SelectedBox == Box)
+		SelectedBox = nullptr;
+}
+
+void ACubeTDArena::RoundFinished()
+{
 }
 
 
@@ -215,5 +232,18 @@ void ACubeTDArena::OnConstruction(const FTransform & Transform)
 ACubeTDBox * ACubeTDArena::GetSelectedBox() const
 {
 	return SelectedBox;
+}
+
+void ACubeTDArena::StartNewRound()
+{
+	
+}
+
+void ACubeTDArena::SetBoxesEnabled(bool Enabled)
+{
+	for (auto Pair : ArenaData->Boxes) {
+		if (Pair.Key != Origin && Pair.Key != Destination)
+			Pair.Value->Disable();
+	}
 }
 

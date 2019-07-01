@@ -59,6 +59,7 @@ public:
 	//Delegates
 	FBoxDelegate OnBoxPreUpdated;
 	FBoxDelegate OnBoxSelected;
+	FBoxDelegate OnBoxDeselected;
 
 protected:
 	// Called when the game starts or when spawned
@@ -80,19 +81,27 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-		bool IsNavigable() const;
+	bool IsNavigable() const;
 
 	UFUNCTION(BlueprintCallable)
-		void DestroyStructure();
+	void DestroyStructure();
 	UFUNCTION(BlueprintCallable)
-		void BuildStructure();
+	void BuildStructure();
 	UFUNCTION(BlueprintCallable)
-		void UpgradeStructure();
+	void UpgradeStructure();
 
 	UFUNCTION(BlueprintCallable)
-		void UpdateBox();
+	void UpdateBox();
 	UFUNCTION(BlueprintCallable)
-		void CancelUpdate();
+	void CancelUpdate();
+
 	UFUNCTION(BlueprintCallable)
-		void Disable();
+	void Disable();
+	UFUNCTION(BlueprintCallable)
+	void Enable();
+
+	UFUNCTION(BlueprintCallable)
+	void Select();
+	UFUNCTION(BlueprintCallable)
+	void Deselect();
 };

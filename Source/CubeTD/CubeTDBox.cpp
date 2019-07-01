@@ -100,6 +100,32 @@ void ACubeTDBox::Disable()
 		Mesh->SetMaterial(0, DisabledMaterial);
 }
 
+void ACubeTDBox::Enable()
+{
+	Interactionable = true;
+
+	if(Selected && UsedMaterial)
+		Mesh->SetMaterial(0, UsedMaterial);
+	else if (DefaultMaterial)
+		Mesh->SetMaterial(0, DefaultMaterial);
+}
+
+void ACubeTDBox::Select()
+{
+	Selected = true;
+	if (UsedMaterial)
+		Mesh->SetMaterial(0, UsedMaterial);
+	OnBoxSelected.Broadcast(this);
+}
+
+void ACubeTDBox::Deselect()
+{
+	Selected = false;
+	if (DefaultMaterial)
+		Mesh->SetMaterial(0, DefaultMaterial);
+	OnBoxDeselected.Broadcast(this);
+}
+
 // Called when the game starts or when spawned
 void ACubeTDBox::BeginPlay()
 {
@@ -132,10 +158,15 @@ void ACubeTDBox::OnMouseClicked(UPrimitiveComponent * TouchedComponent, FKey key
 {
 	if (Interactionable) {
 		//TODO interfaz elegir opciones
-		Selected = true;
+		if (Selected) {
+			Deselect();
+		}
+		if (!Selected) {
+			Select();
+		}
+		
 		if (Structure==nullptr) {
-			if (UsedMaterial)
-				Mesh->SetMaterial(0, UsedMaterial);
+			
 			BuildStructure();
 		}
 		else{
