@@ -8,10 +8,15 @@
 #include "ArenaData.h"
 #include "SplineFollower.h"
 
+#include "Structures/Spawner.h"
+#include "Structures/Nexus.h"
+
 #include "Components/StaticMeshComponent.h"
 #include "Components/SplineComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+
+#include "Engine/DataTable.h"
 
 #include "GameFramework/Pawn.h"
 #include "CubeTDArena.generated.h"
@@ -49,10 +54,24 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UArenaData* ArenaData;
 
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arena Settings")
 	FIntVector Origin;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arena Settings")
 	FIntVector Destination;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
+	TSubclassOf<ASpawner> SpawnerClass;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
+	TSubclassOf<ANexus> NexusClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int Rounds;	//	->	This counter starts at 1 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arena Settings")
+	TArray<UDataTable*> RoundsSpawnsData;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	ACubeTDBox* SelectedBox;
 
 	//Delegates
 	UPROPERTY(BlueprintAssignable)
@@ -65,8 +84,6 @@ protected:
 	virtual bool UpdatePath();
 
 	TArray<ASplineFollower*> SplineFollowersSpawned;
-	UPROPERTY()
-	ACubeTDBox* SelectedBox;
 
 	void SpawnSplineFollowers();
 	void ClearSplineFollowers();
@@ -74,6 +91,12 @@ protected:
 	//Functions for delegates
 	UFUNCTION()
 	void BoxPreUpdated(ACubeTDBox* Box);
+	UFUNCTION()
+	void BoxSelected(ACubeTDBox* Box);
+	UFUNCTION()
+	void BoxDeselected(ACubeTDBox* Box);
+
+	void RoundFinished();
 
 public:	
 	// Called every frame
@@ -87,4 +110,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	ACubeTDBox* GetSelectedBox() const;
+
+	UFUNCTION(BlueprintCallable)
+	void StartNewRound();
+
+	UFUNCTION(BlueprintCallable)
+	void SetBoxesEnabled(bool Enabled);
 };

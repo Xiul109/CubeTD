@@ -64,16 +64,33 @@ void ACubeTDBox::BuildStructure()
 	}
 }
 
-void ACubeTDBox::UpgradeStructure()
+void ACubeTDBox::UpgradeStructure(int option)
 {
+	TSubclassOf<ABasicStructure> ToSpawn;
+	switch (option)
+	{
+	case 0:
+		ToSpawn = ShootingTowerClass;
+		break;
+	case 1:
+		ToSpawn = AoeTowerClass;
+		break;
+	default:
+		break;
+	}
 	Structure->Destroy();
 	auto World = GetWorld();
-	ABasicStructure* newStructure = World->SpawnActor<ABasicStructure>(ShootingTowerClass);
+	ABasicStructure* newStructure = World->SpawnActor<ABasicStructure>(ToSpawn);
 	FVector SpawnScale = (this->GetActorScale3D());
 	newStructure->SetActorScale3D(SpawnScale);
 	FVector SpawnLocation = (this)->GetActorLocation();
 	newStructure->SetActorLocation(SpawnLocation);
 	Structure = Cast<ABasicStructure>(newStructure);
+	Structure->damage = 2;
+}
+void ACubeTDBox::UpgradeTowerStats()
+{
+	Structure->damage += 1;
 }
 
 void ACubeTDBox::UpdateBox()
@@ -90,6 +107,45 @@ void ACubeTDBox::CancelUpdate()
 	if (ErrorMaterial)
 		Mesh->SetMaterial(0, ErrorMaterial);
 
+}
+
+void ACubeTDBox::Disable()
+{
+	Interactionable = false;
+
+	if(DisabledMaterial)
+		Mesh->SetMaterial(0, DisabledMaterial);
+}
+
+void ACubeTDBox::Enable()
+{
+	Interactionable = true;
+
+	if(Selected && UsedMaterial)
+		Mesh->SetMaterial(0, UsedMaterial);
+	else if (DefaultMaterial)
+		Mesh->SetMaterial(0, DefaultMaterial);
+}
+
+void ACubeTDBox::Select()
+{
+	Selected = true;
+	if (UsedMaterial)
+		Mesh->SetMaterial(0, UsedMaterial);
+	OnBoxSelected.Broadcast(this);
+}
+
+void ACubeTDBox::Deselect()
+{
+	Selected = false;
+	if (DefaultMaterial)
+		Mesh->SetMaterial(0, DefaultMaterial);
+	OnBoxDeselected.Broadcast(this);
+}
+
+ABasicStructure * ACubeTDBox::GetStructure()
+{
+	return Structure;
 }
 
 // Called when the game starts or when spawned
@@ -124,10 +180,32 @@ void ACubeTDBox::OnMouseClicked(UPrimitiveComponent * TouchedComponent, FKey key
 {
 	if (Interactionable) {
 		//TODO interfaz elegir opciones
-		Selected = true;
-		if (Structure==nullptr) {
-			if (UsedMaterial)
-				Mesh->SetMaterial(0, UsedMaterial);
+		if (!Selected) {
+			Select();
+		}
+			if (Structure == nullptr && BuildHudClass != nullptr) {
+				CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), BuildHudClass);
+				if (CurrentWidget != nullptr) {
+					CurrentWidget->AddToViewport();
+				}
+			}
+			else if (Structure->GetClass() == BasicTowerClass) {
+				CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), UpgradeTowerHudClass);
+				if (CurrentWidget != nullptr) {
+					CurrentWidget->AddToViewport();
+				}
+			}
+				else{
+					CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), UpgradeTowerStatsHudClass);
+					if (CurrentWidget != nullptr) {
+						CurrentWidget->AddToViewport();
+					}
+				}
+			}
+		
+		
+		/*if (Structure==nullptr) {
+			
 			BuildStructure();
 		}
 		else{
@@ -137,11 +215,11 @@ void ACubeTDBox::OnMouseClicked(UPrimitiveComponent * TouchedComponent, FKey key
 				Mesh->SetMaterial(0, DefaultMaterial);
 
 			DestroyStructure();
-			*/
+			
 			UpgradeStructure();
-		}
+		}*/
 
-	}
+	
 }
 
 // Called every frame

@@ -22,6 +22,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		bool Navigable;
 
+	float damage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Name")
+	FString Name;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -30,6 +34,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	
-	
+	UFUNCTION(BlueprintCallable)
+		float GetDamage();
+	UFUNCTION(BlueprintCallable)
+		FString GetName();
 };

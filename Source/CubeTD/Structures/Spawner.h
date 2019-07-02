@@ -3,12 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
 #include "BasicStructure.h"
-#include "BasicTower.generated.h"
+#include "Spawner.generated.h"
 
+/**
+ * 
+ */
 UCLASS()
-class CUBETD_API ABasicTower : public ABasicStructure
+class CUBETD_API ASpawner : public ABasicStructure
 {
 	GENERATED_BODY()
+
+public:
+	virtual void OnConstruction(const FTransform & Transform) override;
+
 };

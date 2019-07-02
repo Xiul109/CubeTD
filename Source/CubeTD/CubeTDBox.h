@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
 #include "Components/StaticMeshComponent.h"
-
 #include "GameFramework/Actor.h"
 #include "BasicStructure.h"
+#include "Blueprint/UserWidget.h"
 #include "CubeTDBox.generated.h"
+
 
 
 UCLASS()
@@ -33,15 +33,28 @@ public:
 		UMaterialInterface* UsedMaterial;
 	UPROPERTY(EditAnywhere)
 		UMaterialInterface* ErrorMaterial;
+	UPROPERTY(EditAnywhere)
+		UMaterialInterface* DisabledMaterial;
 
 	UPROPERTY()
 		ABasicStructure* Structure;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
 		TSubclassOf<ABasicStructure> BasicTowerClass;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
 		TSubclassOf<ABasicStructure> ShootingTowerClass;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
 		TSubclassOf<ABasicStructure> AoeTowerClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "HUD")
+		TSubclassOf<UUserWidget> BuildHudClass;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "HUD")
+		TSubclassOf<UUserWidget> UpgradeTowerHudClass;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "HUD")
+		TSubclassOf<UUserWidget> UpgradeTowerStatsHudClass;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		class UUserWidget* CurrentWidget;
+
 
 	//UI Params
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
@@ -55,6 +68,7 @@ public:
 	//Delegates
 	FBoxDelegate OnBoxPreUpdated;
 	FBoxDelegate OnBoxSelected;
+	FBoxDelegate OnBoxDeselected;
 
 protected:
 	// Called when the game starts or when spawned
@@ -76,17 +90,31 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-		bool IsNavigable() const;
+	bool IsNavigable() const;
 
 	UFUNCTION(BlueprintCallable)
-		void DestroyStructure();
+	void DestroyStructure();
 	UFUNCTION(BlueprintCallable)
-		void BuildStructure();
+	void BuildStructure();
 	UFUNCTION(BlueprintCallable)
-		void UpgradeStructure();
+	void UpgradeStructure(int option);
+	UFUNCTION(BlueprintCallable)
+	void UpgradeTowerStats();
+	UFUNCTION(BlueprintCallable)
+	void UpdateBox();
+	UFUNCTION(BlueprintCallable)
+	void CancelUpdate();
 
 	UFUNCTION(BlueprintCallable)
-		void UpdateBox();
+	void Disable();
 	UFUNCTION(BlueprintCallable)
-		void CancelUpdate();
+	void Enable();
+
+	UFUNCTION(BlueprintCallable)
+	void Select();
+	UFUNCTION(BlueprintCallable)
+	void Deselect();
+
+	UFUNCTION(BlueprintCallable)
+	ABasicStructure* GetStructure();
 };
