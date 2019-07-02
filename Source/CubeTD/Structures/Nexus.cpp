@@ -37,5 +37,6 @@ void ANexus::BeginOverlap(AActor * OverlappedActor, AActor * OtherActor)
 
 void ANexus::BeginPlay()
 {
+	Super::BeginPlay();
 	OnActorBeginOverlap.AddDynamic(this, &ANexus::BeginOverlap);
 }

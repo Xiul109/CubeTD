@@ -6,7 +6,7 @@
 #include "Components/InputComponent.h"
 
 // Sets default values
-ACubeTDArena::ACubeTDArena(): Subdivisions(3), Rounds(0)
+ACubeTDArena::ACubeTDArena(): Subdivisions(3)
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -46,10 +46,13 @@ void ACubeTDArena::BeginPlay()
 
 	auto World = GetWorld();
 	if (World) {
-		if (SpawnerClass)
-			OriginBox->Structure = World->SpawnActor<ABasicStructure>(SpawnerClass, OriginBox->GetActorTransform());
+		if (SpawnerClass) {
+			OriginBox->Structure = Spawner = World->SpawnActor<ASpawner>(SpawnerClass, OriginBox->GetActorTransform());
+			Spawner->SetSplineRef(EnemiesPath);
+			Spawner->OnRoundFinished.AddDynamic(this, &ACubeTDArena::RoundFinished);
+		}
 		if(NexusClass)
-			DestinationBox->Structure = World->SpawnActor<ABasicStructure>(NexusClass, DestinationBox->GetActorTransform());
+			DestinationBox->Structure = Nexus	= World->SpawnActor<ANexus>(NexusClass, DestinationBox->GetActorTransform());
 	}
 
 	//Box Update Delegates
@@ -79,6 +82,10 @@ bool ACubeTDArena::UpdatePath()
 					EnemiesPath->AddSplinePoint(Point,ESplineCoordinateSpace::World);
 				}
 				EnemiesPath->bDrawDebug = true;
+
+				if(Spawner)
+					Spawner->SetSplineRef(EnemiesPath);
+
 				return true;
 			}
 		}
@@ -144,6 +151,8 @@ void ACubeTDArena::BoxDeselected(ACubeTDBox * Box)
 
 void ACubeTDArena::RoundFinished()
 {
+	OnRoundFinished.Broadcast();
+	SetBoxesEnabled(true);
 }
 
 
@@ -236,14 +245,21 @@ ACubeTDBox * ACubeTDArena::GetSelectedBox() const
 
 void ACubeTDArena::StartNewRound()
 {
-	
+	if (Spawner) {
+		int NextRoundSpawns = (Spawner->Round + 1) % RoundsSpawnsData.Num();
+		Spawner->ActivateSpawner(RoundsSpawnsData[NextRoundSpawns]);
+		SetBoxesEnabled(false);
+	}
 }
 
 void ACubeTDArena::SetBoxesEnabled(bool Enabled)
 {
 	for (auto Pair : ArenaData->Boxes) {
 		if (Pair.Key != Origin && Pair.Key != Destination)
-			Pair.Value->Disable();
+			if(Enabled)
+				Pair.Value->Enable();
+			else
+				Pair.Value->Disable();
 	}
 }
 
