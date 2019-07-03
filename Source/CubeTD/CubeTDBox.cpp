@@ -183,43 +183,26 @@ void ACubeTDBox::OnMouseClicked(UPrimitiveComponent * TouchedComponent, FKey key
 		if (!Selected) {
 			Select();
 		}
-			if (Structure == nullptr && BuildHudClass != nullptr) {
-				CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), BuildHudClass);
-				if (CurrentWidget != nullptr) {
-					CurrentWidget->AddToViewport();
-				}
+		if (Structure == nullptr && BuildHudClass != nullptr) {
+			CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), BuildHudClass);
+			if (CurrentWidget != nullptr) {
+				CurrentWidget->AddToViewport();
 			}
-			else if (Structure->GetClass() == BasicTowerClass) {
-				CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), UpgradeTowerHudClass);
-				if (CurrentWidget != nullptr) {
-					CurrentWidget->AddToViewport();
-				}
-			}
-				else{
-					CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), UpgradeTowerStatsHudClass);
-					if (CurrentWidget != nullptr) {
-						CurrentWidget->AddToViewport();
-					}
-				}
-			}
-		
-		
-		/*if (Structure==nullptr) {
-			
-			BuildStructure();
 		}
-		else{
-			/*Selected = false;
+		else if (Structure->GetClass() == BasicTowerClass) {
+			CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), UpgradeTowerHudClass);
+			if (CurrentWidget != nullptr) {
+				CurrentWidget->AddToViewport();
+			}
+		}
+		else {
+			CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), UpgradeTowerStatsHudClass);
+			if (CurrentWidget != nullptr) {
+				CurrentWidget->AddToViewport();
+			}
+		}
+	}
 
-			if (DefaultMaterial)
-				Mesh->SetMaterial(0, DefaultMaterial);
-
-			DestroyStructure();
-			
-			UpgradeStructure();
-		}*/
-
-	
 }
 
 // Called every frame

@@ -96,6 +96,7 @@ public:
 	void DestroyStructure();
 	UFUNCTION(BlueprintCallable)
 	void BuildStructure();
+
 	UFUNCTION(BlueprintCallable)
 	void UpgradeStructure(int option);
 	UFUNCTION(BlueprintCallable)
@@ -117,4 +118,23 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	ABasicStructure* GetStructure();
+
+	UFUNCTION(BlueprintCallable)
+	void UpgradeStructure();
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateBox();
+	UFUNCTION(BlueprintCallable)
+	void CancelUpdate();
+
+	UFUNCTION(BlueprintCallable)
+	void Disable();
+	UFUNCTION(BlueprintCallable)
+	void Enable();
+
+	UFUNCTION(BlueprintCallable)
+	void Select();
+	UFUNCTION(BlueprintCallable)
+	void Deselect();
+
 };

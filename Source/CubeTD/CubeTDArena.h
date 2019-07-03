@@ -27,7 +27,7 @@ class CUBETD_API ACubeTDArena : public APawn
 {
 	GENERATED_BODY()
 
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPathBlockedDelegate);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FBasicDelegate);
 
 public:
 	// Sets default values for this pawn's properties
@@ -73,9 +73,23 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	ACubeTDBox* SelectedBox;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ingame Info")
+	ASpawner* Spawner;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ingame Info")
+	ANexus* Nexus;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arena Settings")
+	TArray<UDataTable*> RoundsSpawnsData;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
+	ACubeTDBox* SelectedBox;
+
 	//Delegates
 	UPROPERTY(BlueprintAssignable)
-	FPathBlockedDelegate OnPathBlocked;
+	FBasicDelegate OnPathBlocked;
+	UPROPERTY(BlueprintAssignable)
+	FBasicDelegate OnRoundFinished;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -95,7 +109,7 @@ protected:
 	void BoxSelected(ACubeTDBox* Box);
 	UFUNCTION()
 	void BoxDeselected(ACubeTDBox* Box);
-
+	UFUNCTION()
 	void RoundFinished();
 
 public:	
