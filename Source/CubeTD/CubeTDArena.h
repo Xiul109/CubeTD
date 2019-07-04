@@ -70,19 +70,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arena Settings")
 	TArray<UDataTable*> RoundsSpawnsData;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
 	ACubeTDBox* SelectedBox;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ingame Info")
 	ASpawner* Spawner;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ingame Info")
 	ANexus* Nexus;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arena Settings")
-	TArray<UDataTable*> RoundsSpawnsData;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "UI")
-	ACubeTDBox* SelectedBox;
 
 	//Delegates
 	UPROPERTY(BlueprintAssignable)

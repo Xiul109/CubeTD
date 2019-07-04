@@ -118,23 +118,4 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	ABasicStructure* GetStructure();
-
-	UFUNCTION(BlueprintCallable)
-	void UpgradeStructure();
-
-	UFUNCTION(BlueprintCallable)
-	void UpdateBox();
-	UFUNCTION(BlueprintCallable)
-	void CancelUpdate();
-
-	UFUNCTION(BlueprintCallable)
-	void Disable();
-	UFUNCTION(BlueprintCallable)
-	void Enable();
-
-	UFUNCTION(BlueprintCallable)
-	void Select();
-	UFUNCTION(BlueprintCallable)
-	void Deselect();
-
 };

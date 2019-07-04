@@ -19,8 +19,6 @@ class CUBETD_API ASpawner : public ABasicStructure
 	GENERATED_BODY()
 
 public:
-	virtual void OnConstruction(const FTransform & Transform) override;
-
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FRoundFinishedDelegate);
 
 public:

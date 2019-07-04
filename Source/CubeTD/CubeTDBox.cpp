@@ -189,7 +189,7 @@ void ACubeTDBox::OnMouseClicked(UPrimitiveComponent * TouchedComponent, FKey key
 				CurrentWidget->AddToViewport();
 			}
 		}
-		else if (Structure->GetClass() == BasicTowerClass) {
+		else if (Structure && Structure->GetClass() == BasicTowerClass) {
 			CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), UpgradeTowerHudClass);
 			if (CurrentWidget != nullptr) {
 				CurrentWidget->AddToViewport();
