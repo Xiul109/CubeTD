@@ -11,9 +11,7 @@ AShootingTower::AShootingTower()
 	CollisionComp->SetSphereRadius(240);
 	CollisionComp->AttachToComponent(Mesh, FAttachmentTransformRules::KeepRelativeTransform);
 	CollisionComp->OnComponentBeginOverlap.AddDynamic(this, &AShootingTower::BeginOverlap);
-	
 	CoolDown = 4.f;
-
 }
 
 void AShootingTower::BeginOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
@@ -40,9 +38,9 @@ void AShootingTower::Tick(float DeltaTime)
 					spawnParams.Owner = this;
 					spawnParams.Instigator = Instigator;
 
-					//AProjectile* FiredProjectile = World->SpawnActor<AProjectile>(ProjectileClass, currentPos, currentRot, spawnParams);
+					AProjectile* FiredProjectile = World->SpawnActor<AProjectile>(ProjectileClass, currentPos, currentRot, spawnParams);
 
-					AProjectile* FiredProjectile = World->SpawnActor<AProjectile>(ProjectileClass);
+					//AProjectile* FiredProjectile = World->SpawnActor<AProjectile>(ProjectileClass);
 
 					if (FiredProjectile != nullptr)
 					{

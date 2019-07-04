@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
 #include "Components/StaticMeshComponent.h"
-
 #include "GameFramework/Actor.h"
 #include "BasicStructure.h"
+#include "Blueprint/UserWidget.h"
 #include "CubeTDBox.generated.h"
+
 
 
 UCLASS()
@@ -46,6 +46,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
 		TSubclassOf<ABasicStructure> AoeTowerClass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "HUD")
+		TSubclassOf<UUserWidget> BuildHudClass;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "HUD")
+		TSubclassOf<UUserWidget> UpgradeTowerHudClass;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "HUD")
+		TSubclassOf<UUserWidget> UpgradeTowerStatsHudClass;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		class UUserWidget* CurrentWidget;
+
 
 	//UI Params
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
@@ -59,6 +68,7 @@ public:
 	//Delegates
 	FBoxDelegate OnBoxPreUpdated;
 	FBoxDelegate OnBoxSelected;
+	FBoxDelegate OnBoxDeselected;
 
 protected:
 	// Called when the game starts or when spawned
@@ -80,19 +90,32 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
-		bool IsNavigable() const;
+	bool IsNavigable() const;
 
 	UFUNCTION(BlueprintCallable)
-		void DestroyStructure();
+	void DestroyStructure();
 	UFUNCTION(BlueprintCallable)
-		void BuildStructure();
-	UFUNCTION(BlueprintCallable)
-		void UpgradeStructure();
+	void BuildStructure();
 
 	UFUNCTION(BlueprintCallable)
-		void UpdateBox();
+	void UpgradeStructure(int option);
 	UFUNCTION(BlueprintCallable)
-		void CancelUpdate();
+	void UpgradeTowerStats();
 	UFUNCTION(BlueprintCallable)
-		void Disable();
+	void UpdateBox();
+	UFUNCTION(BlueprintCallable)
+	void CancelUpdate();
+
+	UFUNCTION(BlueprintCallable)
+	void Disable();
+	UFUNCTION(BlueprintCallable)
+	void Enable();
+
+	UFUNCTION(BlueprintCallable)
+	void Select();
+	UFUNCTION(BlueprintCallable)
+	void Deselect();
+
+	UFUNCTION(BlueprintCallable)
+	ABasicStructure* GetStructure();
 };

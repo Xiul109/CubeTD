@@ -6,7 +6,7 @@
 #include "Components/InputComponent.h"
 
 // Sets default values
-ACubeTDArena::ACubeTDArena(): Subdivisions(3)
+ACubeTDArena::ACubeTDArena(): Subdivisions(3), Rounds(0)
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -46,19 +46,27 @@ void ACubeTDArena::BeginPlay()
 
 	auto World = GetWorld();
 	if (World) {
+
 		if (SpawnerClass)
 			OriginBox->Structure = World->SpawnActor<ABasicStructure>(SpawnerClass, OriginBox->GetActorTransform());
 		if(NexusClass)
 			DestinationBox->Structure = World->SpawnActor<ABasicStructure>(NexusClass, DestinationBox->GetActorTransform());
-	}
 
-	UE_LOG(LogTemp, Warning, TEXT("Origin Navigable: %d"), OriginBox->Structure->Navigable);
-	UE_LOG(LogTemp, Warning, TEXT("Destination Navigable: %d"), DestinationBox->Structure->Navigable);
+		if (SpawnerClass) {
+			OriginBox->Structure = Spawner = World->SpawnActor<ASpawner>(SpawnerClass, OriginBox->GetActorTransform());
+			Spawner->SetSplineRef(EnemiesPath);
+			Spawner->OnRoundFinished.AddDynamic(this, &ACubeTDArena::RoundFinished);
+		}
+		if(NexusClass)
+			DestinationBox->Structure = Nexus	= World->SpawnActor<ANexus>(NexusClass, DestinationBox->GetActorTransform());
+
+	}
 
 	//Box Update Delegates
 	for (auto Box : ArenaData->Boxes) {
 		Box.Value->OnBoxPreUpdated.AddDynamic(this, &ACubeTDArena::BoxPreUpdated);
-		Box.Value->OnBoxSelected.AddDynamic(this, &ACubeTDArena::BoxPreUpdated);
+		Box.Value->OnBoxSelected.AddDynamic(this, &ACubeTDArena::BoxSelected);
+		Box.Value->OnBoxDeselected.AddDynamic(this, &ACubeTDArena::BoxDeselected);
 	}
 }
 
@@ -81,6 +89,10 @@ bool ACubeTDArena::UpdatePath()
 					EnemiesPath->AddSplinePoint(Point,ESplineCoordinateSpace::World);
 				}
 				EnemiesPath->bDrawDebug = true;
+
+				if(Spawner)
+					Spawner->SetSplineRef(EnemiesPath);
+
 				return true;
 			}
 		}
@@ -127,6 +139,27 @@ void ACubeTDArena::BoxPreUpdated(ACubeTDBox* Box)
 		OnPathBlocked.Broadcast();
 		Box->CancelUpdate();
 	}
+}
+
+void ACubeTDArena::BoxSelected(ACubeTDBox * Box)
+{
+	if (Box != SelectedBox) {
+		if(SelectedBox)
+			SelectedBox->Deselect();
+		SelectedBox = Box;
+	}
+}
+
+void ACubeTDArena::BoxDeselected(ACubeTDBox * Box)
+{
+	if (SelectedBox == Box)
+		SelectedBox = nullptr;
+}
+
+void ACubeTDArena::RoundFinished()
+{
+	OnRoundFinished.Broadcast();
+	SetBoxesEnabled(true);
 }
 
 
@@ -215,5 +248,26 @@ void ACubeTDArena::OnConstruction(const FTransform & Transform)
 ACubeTDBox * ACubeTDArena::GetSelectedBox() const
 {
 	return SelectedBox;
+}
+
+void ACubeTDArena::StartNewRound()
+{	
+	if (Spawner) {
+		int NextRoundSpawns = (Spawner->Round + 1) % RoundsSpawnsData.Num();
+		Spawner->ActivateSpawner(RoundsSpawnsData[NextRoundSpawns]);
+		SetBoxesEnabled(false);
+	}
+}
+
+void ACubeTDArena::SetBoxesEnabled(bool Enabled)
+{
+	for (auto Pair : ArenaData->Boxes) {
+		if (Pair.Key != Origin && Pair.Key != Destination)
+			Pair.Value->Disable();
+			if(Enabled)
+				Pair.Value->Enable();
+			else
+				Pair.Value->Disable();
+	}
 }
 

@@ -31,3 +31,14 @@ void ABasicStructure::Tick(float DeltaTime)
 
 }
 
+float ABasicStructure::GetDamage()
+{
+	return damage;
+}
+
+FString ABasicStructure::GetName()
+{
+	return Name;
+	
+}
+

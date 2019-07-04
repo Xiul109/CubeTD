@@ -11,5 +11,4 @@ UCLASS()
 class CUBETD_API ABasicTower : public ABasicStructure
 {
 	GENERATED_BODY()
-	
 };
