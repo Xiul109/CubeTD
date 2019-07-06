@@ -3,26 +3,28 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Projectile.h"
+#include "BaseProjectile.h"
 #include "ExplosiveProjectile.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CUBETD_API AExplosiveProjectile : public AProjectile
+class CUBETD_API AExplosiveProjectile : public ABaseProjectile
 {
 	GENERATED_BODY()
 	
 public:
 	// Sets default values for this actor's properties
 	AExplosiveProjectile();
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Collision")
 		class USphereComponent* ExplosionCollision;
 
 public:
-	void Explode();
+	void BeginExplode();
 	void CalculateExplosion();
+	UFUNCTION()
+		void OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &hitResult);
+
 
 };

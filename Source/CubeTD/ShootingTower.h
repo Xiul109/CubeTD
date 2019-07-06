@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BasicTower.h"
-#include "Projectile.h"
+#include "BaseProjectile.h"
 #include "ShootingTower.generated.h"
 
 
@@ -31,10 +31,10 @@ public:
 
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Turret Projectiles")
-		TSubclassOf<class AProjectile> ProjectileClass;
+		TSubclassOf<class ABaseProjectile> ProjectileClass;
 
 	UPROPERTY(EditAnywhere)
-		ASplineFollower* Target;
+		ABaseEnemy* Target;
 	
 	float CoolDown;
 	float AccumulatedDeltaTime;

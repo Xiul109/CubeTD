@@ -26,8 +26,8 @@ ACubeTDArena::ACubeTDArena(): Subdivisions(3), Rounds(0)
 	Camera->bUsePawnControlRotation = false;
 
 	//Main Mesh
-	MainMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MainMesh"));
-	MainMesh->AttachToComponent(Root, FAttachmentTransformRules::KeepRelativeTransform);
+	GroundMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GroundMesh"));
+	GroundMesh->AttachToComponent(Root, FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 // Called when the game starts or when spawned
@@ -202,7 +202,7 @@ void ACubeTDArena::OnConstruction(const FTransform & Transform)
 		float BoxMeshSize = BoxDims.GetMax();
 
 		//Obtaining the new Scale for the boxes
-		MainMesh->GetLocalBounds(Min, Max);
+		GroundMesh->GetLocalBounds(Min, Max);
 		FVector MainMeshDims = Max - Min;
 		float MainMeshSize = MainMeshDims.GetMax();
 		float BoxScale = (MainMeshSize/Subdivisions)/BoxMeshSize;
@@ -221,7 +221,7 @@ void ACubeTDArena::OnConstruction(const FTransform & Transform)
 						//Creating and attaching the object
 						FName Name = FName(*FString::Printf(TEXT("Box_%d_%d_%d"), i, j, k));
 						UChildActorComponent* AuxActor = NewObject<UChildActorComponent>(this, Name);
-						AuxActor->AttachToComponent(MainMesh, FAttachmentTransformRules::KeepRelativeTransform);
+						AuxActor->AttachToComponent(GroundMesh, FAttachmentTransformRules::KeepRelativeTransform);
 
 						//Creating the Box itself
 						AuxActor->CreationMethod = EComponentCreationMethod::UserConstructionScript;

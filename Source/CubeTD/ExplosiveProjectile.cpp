@@ -5,24 +5,39 @@
 
 AExplosiveProjectile::AExplosiveProjectile() {
 	ExplosionCollision= CreateDefaultSubobject<USphereComponent>(TEXT("ExplosionCollision"));
+	ExplosionCollision->SetupAttachment(RootComponent);
+	CollisionComp = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionComp"));
+	CollisionComp->SetupAttachment(ProjectileMesh);
+	CollisionComp->OnComponentBeginOverlap.AddDynamic(this, &AExplosiveProjectile::OnOverlapBegin);
 }
-void AExplosiveProjectile::Explode()
+void AExplosiveProjectile::BeginExplode()
 {
-	PlayExplosion(ExplosionSystem);
-	PlayExplosionSound(ExplosionSound);
-	//Calcular daño area;
-	if (this->IsValidLowLevel()) {
-		Destroy();
-	}
+	CalculateExplosion();
+	Explode();
 }
 
 void AExplosiveProjectile::CalculateExplosion()
 {
 	TArray<AActor*> Enemigos;
-	ExplosionCollision->GetOverlappingActors(Enemigos,TSubclassOf<ASplineFollower>());
+	ExplosionCollision->GetOverlappingActors(Enemigos, ABaseEnemy::StaticClass());
 	for (AActor* enemigo : Enemigos) {
 		//Llamar evento takedamage del enemigo
 	}
 }
 
+void AExplosiveProjectile::OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* otherActor, UPrimitiveComponent* otherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &hitResult)
+{
+	class ABaseEnemy* Enemy = Cast<ABaseEnemy>(otherActor);
+
+	if (Enemy != nullptr)
+	{
+		BeginExplode();
+	}
+
+	if (otherComp->GetName() == "GroundMesh")
+	{
+		Explode();
+	}
+
+}
 

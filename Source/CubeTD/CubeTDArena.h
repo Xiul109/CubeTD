@@ -38,7 +38,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UCameraComponent* Camera;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UStaticMeshComponent* MainMesh;
+	UStaticMeshComponent* GroundMesh;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	USplineComponent* EnemiesPath;
 
