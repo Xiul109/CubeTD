@@ -79,13 +79,14 @@ void ACubeTDBox::UpgradeStructure(int option)
 	default:
 		break;
 	}
-	Structure->Destroy();
+	
 	auto World = GetWorld();
 	if (World) {
 		ABasicStructure* newStructure = World->SpawnActor<ABasicStructure>(ToSpawn);
 		auto GameState = World->GetGameState<ACubeTDGameStateBase>();
-		if (GameState->Resources <= newStructure->BaseCost)
+		if (GameState->Resources >= newStructure->BaseCost)
 		{
+			Structure->Destroy();
 			FVector SpawnScale = (this->GetActorScale3D());
 			newStructure->SetActorScale3D(SpawnScale);
 			FVector SpawnLocation = (this)->GetActorLocation();
@@ -95,15 +96,17 @@ void ACubeTDBox::UpgradeStructure(int option)
 
 			GameState->Resources -= newStructure->BaseCost;
 		}
-		else
+		else {
 			OnNotEnoughResources.Broadcast(this);
+			newStructure->Destroy();
+		}
 	}
 }
 void ACubeTDBox::UpgradeTowerStats()
 {
 	auto GameState = GetWorld()->GetGameState<ACubeTDGameStateBase>();
 	int UpgradeCost = Structure->CalcUpgradeCost();
-	if (GameState->Resources <= UpgradeCost) {
+	if (GameState->Resources >= UpgradeCost) {
 		Structure->damage += 1;
 		GameState->Resources -= UpgradeCost;
 	}
