@@ -55,9 +55,9 @@ public:
 	UArenaData* ArenaData;
 
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arena Settings")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
 	FIntVector Origin;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arena Settings")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
 	FIntVector Destination;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
@@ -65,8 +65,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
 	TSubclassOf<ANexus> NexusClass;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	int Rounds;	//	->	This counter starts at 1 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arena Settings")
 	TArray<UDataTable*> RoundsSpawnsData;
 
@@ -81,6 +79,8 @@ public:
 	//Delegates
 	UPROPERTY(BlueprintAssignable)
 	FBasicDelegate OnPathBlocked;
+	UPROPERTY(BlueprintAssignable)
+	FBasicDelegate OnNotEnoughResources;
 	UPROPERTY(BlueprintAssignable)
 	FBasicDelegate OnRoundFinished;
 
