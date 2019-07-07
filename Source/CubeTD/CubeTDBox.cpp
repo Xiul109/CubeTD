@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "CubeTDBox.h"
+
+#include "CubeTDGameStateBase.h"
 #include "Engine/World.h"
 #include "Components/InputComponent.h"
 
@@ -39,18 +41,19 @@ void ACubeTDBox::DestroyStructure()
 {
 	NeedsUpdate = true;
 
-	OnBoxPreUpdated.Broadcast(this);
-
 	Structure->Destroy();
 
 	Structure = nullptr;
+
+	OnBoxPreUpdated.Broadcast(this);
 }
 
 void ACubeTDBox::BuildStructure()
 {
 	NeedsUpdate = true;
 
-		auto World = GetWorld();
+	auto World = GetWorld();
+	if (World) {
 		ABasicStructure* newStructure = World->SpawnActor<ABasicStructure>(BasicTowerClass);
 		FVector SpawnScale = (this->GetActorScale3D());
 		newStructure->SetActorScale3D(SpawnScale);
@@ -58,9 +61,7 @@ void ACubeTDBox::BuildStructure()
 		newStructure->SetActorLocation(SpawnLocation);
 		Structure = newStructure;
 	
-	OnBoxPreUpdated.Broadcast(this);
-	if (!Selected) {
-		DestroyStructure();
+		OnBoxPreUpdated.Broadcast(this);
 	}
 }
 
@@ -78,28 +79,62 @@ void ACubeTDBox::UpgradeStructure(int option)
 	default:
 		break;
 	}
-	Structure->Destroy();
+	
 	auto World = GetWorld();
-	ABasicStructure* newStructure = World->SpawnActor<ABasicStructure>(ToSpawn);
-	FVector SpawnScale = (this->GetActorScale3D());
-	newStructure->SetActorScale3D(SpawnScale);
-	FVector SpawnLocation = (this)->GetActorLocation();
-	newStructure->SetActorLocation(SpawnLocation);
-	Structure = Cast<ABasicStructure>(newStructure);
-	Structure->damage = 2;
+	if (World) {
+		ABasicStructure* newStructure = World->SpawnActor<ABasicStructure>(ToSpawn);
+		auto GameState = World->GetGameState<ACubeTDGameStateBase>();
+		if (GameState->Resources >= newStructure->BaseCost)
+		{
+			Structure->Destroy();
+			FVector SpawnScale = (this->GetActorScale3D());
+			newStructure->SetActorScale3D(SpawnScale);
+			FVector SpawnLocation = (this)->GetActorLocation();
+			newStructure->SetActorLocation(SpawnLocation);
+			Structure = Cast<ABasicStructure>(newStructure);
+			Structure->Level = 1;
+			GameState->Resources -= newStructure->BaseCost;
+		}
+		else {
+			OnNotEnoughResources.Broadcast(this);
+			newStructure->Destroy();
+		}
+	}
 }
 void ACubeTDBox::UpgradeTowerStats()
 {
-	Structure->damage += 1;
+	auto GameState = GetWorld()->GetGameState<ACubeTDGameStateBase>();
+	int UpgradeCost = Structure->CalcUpgradeCost();
+	if (GameState->Resources >= UpgradeCost) {
+		Structure->ProjectileDamage += Structure->ProjectileDamageUpgrade;
+		Structure->Level += 1;
+		GameState->Resources -= UpgradeCost;
+	}
+	else 
+		OnNotEnoughResources.Broadcast(this);
+	
 }
 
 void ACubeTDBox::UpdateBox()
 {
 	NeedsUpdate = false;
+
+	auto World = GetWorld();
+	if (World && Structure) {
+		auto GameState = World->GetGameState<ACubeTDGameStateBase>();
+		if (GameState->Resources >= Structure->BaseCost)
+			GameState->Resources -= Structure->BaseCost;
+		else {
+			OnNotEnoughResources.Broadcast(this);
+			CancelUpdate();
+		}
+	}
 }
 
 void ACubeTDBox::CancelUpdate()
 {
+	DestroyStructure();
+
 	NeedsUpdate = false;
 
 	Selected = false;

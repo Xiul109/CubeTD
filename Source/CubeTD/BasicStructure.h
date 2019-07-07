@@ -17,14 +17,25 @@ public:
 	ABasicStructure();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-		UStaticMeshComponent* Mesh;
+	UStaticMeshComponent* Mesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		bool Navigable;
-
-	float damage;
+	bool Navigable;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "StructureDamage")
+	float ProjectileDamage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "StructureDamage")
+		float ProjectileDamageUpgrade;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Name")
 	FString Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Economy")
+	int BaseCost;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Economy")
+	int UpgradeCost;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "StructureDamage")
+	int Level;
 
 protected:
 	// Called when the game starts or when spawned
@@ -37,5 +48,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 		float GetDamage();
 	UFUNCTION(BlueprintCallable)
+		float GetDamageUpdate();
+	UFUNCTION(BlueprintCallable)
 		FString GetName();
+	
+	UFUNCTION(BlueprintCallable, Category = "Economy")
+		virtual int CalcUpgradeCost();
+	UFUNCTION(BlueprintCallable)
+		int GetLevel();
 };

@@ -53,6 +53,7 @@ void AShootingTower::Tick(float DeltaTime)
 						FTransform params;
 						params.SetLocation(currentPos);
 						//params.SetRotation(currentRot);
+						FiredProjectile->damage = this->ProjectileDamage;
 						FiredProjectile->FinishSpawning(params);
 					}
 					

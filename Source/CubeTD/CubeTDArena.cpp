@@ -6,7 +6,7 @@
 #include "Components/InputComponent.h"
 
 // Sets default values
-ACubeTDArena::ACubeTDArena(): Subdivisions(3), Rounds(0)
+ACubeTDArena::ACubeTDArena(): Subdivisions(3)
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;

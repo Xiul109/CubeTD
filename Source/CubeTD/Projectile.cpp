@@ -24,6 +24,7 @@ void AProjectile::OnOverlapBegin(UPrimitiveComponent* overlappedComp, AActor* ot
 	
 	if (Enemy != nullptr)
 	{
+		Enemy->TakeDamage(damage);
 		Explode();
 	}
 

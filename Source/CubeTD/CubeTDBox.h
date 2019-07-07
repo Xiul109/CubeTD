@@ -67,8 +67,11 @@ public:
 
 	//Delegates
 	FBoxDelegate OnBoxPreUpdated;
+
 	FBoxDelegate OnBoxSelected;
 	FBoxDelegate OnBoxDeselected;
+
+	FBoxDelegate OnNotEnoughResources;
 
 protected:
 	// Called when the game starts or when spawned
@@ -81,9 +84,10 @@ protected:
 		void OnEndMouseOver(UPrimitiveComponent* TouchedComponent);
 	UFUNCTION()
 		void OnMouseClicked(UPrimitiveComponent* TouchedComponent, FKey Key);
+
+
 	//Hidden attributes
 	bool NeedsUpdate;
-
 
 public:
 	// Called every frame

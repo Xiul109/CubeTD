@@ -18,10 +18,12 @@ void AExplosiveProjectile::BeginExplode()
 
 void AExplosiveProjectile::CalculateExplosion()
 {
-	TArray<AActor*> Enemigos;
-	ExplosionCollision->GetOverlappingActors(Enemigos, ABaseEnemy::StaticClass());
-	for (AActor* enemigo : Enemigos) {
+	TArray<AActor*> Enemies;
+	ExplosionCollision->GetOverlappingActors(Enemies, ABaseEnemy::StaticClass());
+	for (AActor* enemy : Enemies) {
 		//Llamar evento takedamage del enemigo
+		class ABaseEnemy* CurrentEnemy = Cast<ABaseEnemy>(enemy);
+		CurrentEnemy->TakeDamage(damage);
 	}
 }
 

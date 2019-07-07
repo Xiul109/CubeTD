@@ -27,5 +27,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base Enemy")
 	float Damage;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Economy")
+	int Reward;
+
+	bool CancelReward;
+
 	virtual void OnConstruction(const FTransform & Transform) override;
+
+	void TakeDamage(float Damage);
 };

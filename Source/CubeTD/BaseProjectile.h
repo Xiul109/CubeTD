@@ -31,6 +31,9 @@ public:
 	UPROPERTY(EditAnywhere)
 		ABaseEnemy* Target;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		float damage;
+
 	class UParticleSystemComponent* PlayExplosion(class UParticleSystem* explosion);
 	class UAudioComponent* PlayExplosionSound(class USoundCue *sound);
 

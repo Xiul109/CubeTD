@@ -33,12 +33,27 @@ void ABasicStructure::Tick(float DeltaTime)
 
 float ABasicStructure::GetDamage()
 {
-	return damage;
+	return ProjectileDamage;
+}
+
+float ABasicStructure::GetDamageUpdate()
+{
+	return ProjectileDamageUpgrade;
 }
 
 FString ABasicStructure::GetName()
 {
 	return Name;
 	
+}
+
+int ABasicStructure::CalcUpgradeCost()
+{
+	return UpgradeCost;
+}
+
+int ABasicStructure::GetLevel()
+{
+	return Level;
 }
 
