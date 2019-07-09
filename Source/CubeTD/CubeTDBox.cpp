@@ -48,13 +48,27 @@ void ACubeTDBox::DestroyStructure()
 	OnBoxPreUpdated.Broadcast(this);
 }
 
-void ACubeTDBox::BuildStructure()
+void ACubeTDBox::BuildStructure(int option)
 {
-	NeedsUpdate = true;
+	TSubclassOf<ABasicStructure> ToSpawn;
+	
+	switch (option)
+	{
+	case 0:
+		
+		ToSpawn = BasicTowerClass;
+		NeedsUpdate = true;
+		break;
+	case 1:
+		ToSpawn = SlowTrapClass;
+		break;
+	default:
+		break;
+	}
 
 	auto World = GetWorld();
 	if (World) {
-		ABasicStructure* newStructure = World->SpawnActor<ABasicStructure>(BasicTowerClass);
+		ABasicStructure* newStructure = World->SpawnActor<ABasicStructure>(ToSpawn);
 		FVector SpawnScale = (this->GetActorScale3D());
 		newStructure->SetActorScale3D(SpawnScale);
 		FVector SpawnLocation = (this)->GetActorLocation();
@@ -230,8 +244,14 @@ void ACubeTDBox::OnMouseClicked(UPrimitiveComponent * TouchedComponent, FKey key
 				CurrentWidget->AddToViewport();
 			}
 		}
-		else {
+		else if (Structure && (Structure->GetClass() == ShootingTowerClass || Structure->GetClass() == AoeTowerClass)){
 			CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), UpgradeTowerStatsHudClass);
+			if (CurrentWidget != nullptr) {
+				CurrentWidget->AddToViewport();
+			}
+					}
+		else {
+			CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), TrapStatsHudClass);
 			if (CurrentWidget != nullptr) {
 				CurrentWidget->AddToViewport();
 			}

@@ -3,36 +3,34 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BasicTower.h"
-#include "BaseProjectile.h"
-#include "ShootingTower.generated.h"
-
+#include "BasicStructure.h"
+#include "Engine.h"
+#include "Enemies/BaseEnemy.h"
+#include "SlowTrap.generated.h"
 
 /**
- *
+ * 
  */
 UCLASS()
-class CUBETD_API AShootingTower : public ABasicTower
+class CUBETD_API ASlowTrap : public ABasicStructure
 {
 	GENERATED_BODY()
+	
 public:
-	AShootingTower();
+	ASlowTrap();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Collision")
-		class USphereComponent* CollisionComp;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Turret Projectiles")
-		TSubclassOf<class ABaseProjectile> ProjectileClass;
+		class UBoxComponent* CollisionComp;
 
-	UPROPERTY(EditAnywhere)
-		ABaseEnemy* Target;
-	
-	float CoolDown;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Settings")
+	float Durability;
 	float AccumulatedDeltaTime;
+	bool Activated;
 
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
 	UFUNCTION()
 		void BeginOverlap(UPrimitiveComponent* OverlappedComponent,
 			AActor* OtherActor,
@@ -40,4 +38,12 @@ public:
 			int32 OtherBodyIndex,
 			bool bFromSweep,
 			const FHitResult &SweepResult);
+
+	UFUNCTION()
+		void OverlapEnd(UPrimitiveComponent* OverlappedComp,
+			AActor* OtherActor,
+			UPrimitiveComponent* OtherComp,
+			int32 OtherBodyIndex);
+	
+	
 };

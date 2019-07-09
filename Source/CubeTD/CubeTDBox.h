@@ -45,6 +45,8 @@ public:
 		TSubclassOf<ABasicStructure> ShootingTowerClass;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
 		TSubclassOf<ABasicStructure> AoeTowerClass;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
+		TSubclassOf<ABasicStructure> SlowTrapClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "HUD")
 		TSubclassOf<UUserWidget> BuildHudClass;
@@ -52,6 +54,8 @@ public:
 		TSubclassOf<UUserWidget> UpgradeTowerHudClass;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "HUD")
 		TSubclassOf<UUserWidget> UpgradeTowerStatsHudClass;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "HUD")
+		TSubclassOf<UUserWidget> TrapStatsHudClass;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		class UUserWidget* CurrentWidget;
 
@@ -99,7 +103,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DestroyStructure();
 	UFUNCTION(BlueprintCallable)
-	void BuildStructure();
+	void BuildStructure(int option);
 
 	UFUNCTION(BlueprintCallable)
 	void UpgradeStructure(int option);
