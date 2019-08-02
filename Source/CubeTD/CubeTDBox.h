@@ -16,7 +16,7 @@ class CUBETD_API ACubeTDBox : public AActor
 {
 	GENERATED_BODY()
 
-		DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBoxDelegate, ACubeTDBox*, Box);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBoxDelegate, ACubeTDBox*, Box);
 
 public:
 	// Sets default values for this actor's properties
@@ -72,6 +72,8 @@ public:
 	FBoxDelegate OnBoxDeselected;
 
 	FBoxDelegate OnNotEnoughResources;
+
+	FBoxDelegate OnTowerChange;
 
 protected:
 	// Called when the game starts or when spawned

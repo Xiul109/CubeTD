@@ -83,7 +83,10 @@ public:
 	FBasicDelegate OnNotEnoughResources;
 	UPROPERTY(BlueprintAssignable)
 	FBasicDelegate OnRoundFinished;
-
+	UPROPERTY(BlueprintAssignable)
+	FBasicDelegate OnPathUpdated;
+	UPROPERTY(BlueprintAssignable)
+	FBasicDelegate OnTowerBuiltOrUpgraded;
 
 protected:
 	// Called when the game starts or when spawned
@@ -103,6 +106,8 @@ protected:
 	void BoxSelected(ACubeTDBox* Box);
 	UFUNCTION()
 	void BoxDeselected(ACubeTDBox* Box);
+	UFUNCTION()
+	void TowerChanged(ACubeTDBox* Box);
 	UFUNCTION()
 	void RoundFinished();
 

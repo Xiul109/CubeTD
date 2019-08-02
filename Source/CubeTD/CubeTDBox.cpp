@@ -95,6 +95,7 @@ void ACubeTDBox::UpgradeStructure(int option)
 			Structure->damage = 2;
 
 			GameState->Resources -= newStructure->BaseCost;
+			OnTowerChange.Broadcast(this);
 		}
 		else {
 			OnNotEnoughResources.Broadcast(this);
@@ -109,6 +110,7 @@ void ACubeTDBox::UpgradeTowerStats()
 	if (GameState->Resources >= UpgradeCost) {
 		Structure->damage += 1;
 		GameState->Resources -= UpgradeCost;
+		OnTowerChange.Broadcast(this);
 	}
 	else 
 		OnNotEnoughResources.Broadcast(this);
@@ -122,8 +124,10 @@ void ACubeTDBox::UpdateBox()
 	auto World = GetWorld();
 	if (World && Structure) {
 		auto GameState = World->GetGameState<ACubeTDGameStateBase>();
-		if (GameState->Resources >= Structure->BaseCost)
+		if (GameState->Resources >= Structure->BaseCost) {
 			GameState->Resources -= Structure->BaseCost;
+			OnTowerChange.Broadcast(this);
+		}
 		else {
 			OnNotEnoughResources.Broadcast(this);
 			CancelUpdate();

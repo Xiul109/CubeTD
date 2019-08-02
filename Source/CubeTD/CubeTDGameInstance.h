@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-#include "AchievementeManager.h"
+#include "StatsAndAchievements/AchievementsManager.h"
 
 #include "Engine/GameInstance.h"
 #include "CubeTDGameInstance.generated.h"
@@ -21,7 +21,7 @@ public:
 	UCubeTDGameInstance();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UAchievementeManager* AchievementeManager;
+	UAchievementsManager* AchievementeManager;
 	
 	
 };

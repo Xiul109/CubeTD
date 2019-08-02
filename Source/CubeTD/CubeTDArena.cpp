@@ -67,6 +67,7 @@ void ACubeTDArena::BeginPlay()
 		Box.Value->OnBoxPreUpdated.AddDynamic(this, &ACubeTDArena::BoxPreUpdated);
 		Box.Value->OnBoxSelected.AddDynamic(this, &ACubeTDArena::BoxSelected);
 		Box.Value->OnBoxDeselected.AddDynamic(this, &ACubeTDArena::BoxDeselected);
+		Box.Value->OnTowerChange.AddDynamic(this, &ACubeTDArena::TowerChanged);
 	}
 }
 
@@ -92,6 +93,8 @@ bool ACubeTDArena::UpdatePath()
 
 				if(Spawner)
 					Spawner->SetSplineRef(EnemiesPath);
+
+				OnPathUpdated.Broadcast();
 
 				return true;
 			}
@@ -154,6 +157,11 @@ void ACubeTDArena::BoxDeselected(ACubeTDBox * Box)
 {
 	if (SelectedBox == Box)
 		SelectedBox = nullptr;
+}
+
+void ACubeTDArena::TowerChanged(ACubeTDBox * Box)
+{
+	OnTowerBuiltOrUpgraded.Broadcast();
 }
 
 void ACubeTDArena::RoundFinished()

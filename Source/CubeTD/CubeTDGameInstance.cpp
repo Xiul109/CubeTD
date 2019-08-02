@@ -4,6 +4,6 @@
 
 
 UCubeTDGameInstance::UCubeTDGameInstance() {
-	AchievementeManager = NewObject<UAchievementeManager>();
+	AchievementeManager = NewObject<UAchievementsManager>();
 }
 
