@@ -5,34 +5,11 @@
 #include "CoreMinimal.h"
 
 #include "CubeTDStats.h"
+#include "Achievement.h"
 
 #include "UObject/NoExportTypes.h"
 #include "AchievementsManager.generated.h"
 
-
-USTRUCT(BlueprintType)
-struct CUBETD_API FAchievement {
-	GENERATED_BODY()
-
-	UPROPERTY(BlueprintReadOnly)
-	FString Name;
-	UPROPERTY(BlueprintReadOnly)
-	float Progression;
-	UPROPERTY(BlueprintReadOnly)
-	bool Obtained;
-
-	FAchievement() {
-		Name = "Achievement",
-		Progression = 0;
-		Obtained = false;
-	}
-
-	FAchievement(FString AchievementName) {
-		Name = AchievementName,
-		Progression = 0;
-		Obtained = false;
-	}
-};
 
 /**
  * 
@@ -56,6 +33,8 @@ public:
 	//Delegates
 	UPROPERTY(BlueprintAssignable)
 	FAchievementDelegate OnAchievementObtained;
+
+	virtual void BeginDestroy() override;
 
 protected:
 	void UpdateAchievementProgression(const FString Name, const float Threshold, const float Value);

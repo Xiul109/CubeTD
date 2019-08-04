@@ -2,6 +2,9 @@
 
 #include "AchievementsManager.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "CubeTDSaveGame.h"
+
 // Achievements Names													//Achievements Thresholds values
 constexpr auto ENEMIES1NAME = "Kill your first enemy";					constexpr int ENEMIES1NUM = 1;
 constexpr auto ENEMIES2NAME = "Kill 50 enemies";						constexpr int ENEMIES2NUM = 50;
@@ -28,32 +31,40 @@ constexpr auto MAZE1NAME = "Build a maze with a lenght of 45 boxes";	constexpr i
 constexpr uint8 ALL = 0, ENEMIES = 1, TOWERS = 2, RESOURCES = 3, ROUNDS = 4, OTHER = 5;
 
 UAchievementsManager::UAchievementsManager() {
-	//Hard coded Achievements... sorry
-	//Enemies Achievements
-	Achievements.Add(ENEMIES1NAME, FAchievement(ENEMIES1NAME));
-	Achievements.Add(ENEMIES2NAME, FAchievement(ENEMIES2NAME));
-	Achievements.Add(ENEMIES3NAME, FAchievement(ENEMIES3NAME));
-	Achievements.Add(ENEMIES4NAME, FAchievement(ENEMIES4NAME));
+	//Load Save game	
+	UCubeTDSaveGame* LoadGameInstance = Cast<UCubeTDSaveGame>(UGameplayStatics::CreateSaveGameObject(UCubeTDSaveGame::StaticClass()));
+	LoadGameInstance = Cast<UCubeTDSaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->UserIndex));
+	
+	if(IsValid(LoadGameInstance))
+		Achievements = LoadGameInstance->Achievements;
+	else{
+		//Hard coded Achievements... sorry
+		//Enemies Achievements
+		Achievements.Add(ENEMIES1NAME, FAchievement(ENEMIES1NAME));
+		Achievements.Add(ENEMIES2NAME, FAchievement(ENEMIES2NAME));
+		Achievements.Add(ENEMIES3NAME, FAchievement(ENEMIES3NAME));
+		Achievements.Add(ENEMIES4NAME, FAchievement(ENEMIES4NAME));
 
-	//Towers Achievements
-	Achievements.Add(TOWERS1NAME, FAchievement(TOWERS1NAME));
-	Achievements.Add(TOWERS2NAME, FAchievement(TOWERS2NAME));
-	Achievements.Add(TOWERS3NAME, FAchievement(TOWERS3NAME));
-	Achievements.Add(TOWERS4NAME, FAchievement(TOWERS4NAME));
+		//Towers Achievements
+		Achievements.Add(TOWERS1NAME, FAchievement(TOWERS1NAME));
+		Achievements.Add(TOWERS2NAME, FAchievement(TOWERS2NAME));
+		Achievements.Add(TOWERS3NAME, FAchievement(TOWERS3NAME));
+		Achievements.Add(TOWERS4NAME, FAchievement(TOWERS4NAME));
 
-	//Resources Achievements
-	Achievements.Add(RESOURCES1NAME, FAchievement(RESOURCES1NAME));
-	Achievements.Add(RESOURCES2NAME, FAchievement(RESOURCES2NAME));
-	Achievements.Add(RESOURCES3NAME, FAchievement(RESOURCES3NAME));
+		//Resources Achievements
+		Achievements.Add(RESOURCES1NAME, FAchievement(RESOURCES1NAME));
+		Achievements.Add(RESOURCES2NAME, FAchievement(RESOURCES2NAME));
+		Achievements.Add(RESOURCES3NAME, FAchievement(RESOURCES3NAME));
 
-	//Rounds Achievements
-	Achievements.Add(ROUNDS1NAME, FAchievement(ROUNDS1NAME));
-	Achievements.Add(ROUNDS2NAME, FAchievement(ROUNDS2NAME));
-	Achievements.Add(ROUNDS3NAME, FAchievement(ROUNDS3NAME));
-	Achievements.Add(ROUNDS4NAME, FAchievement(ROUNDS4NAME));
+		//Rounds Achievements
+		Achievements.Add(ROUNDS1NAME, FAchievement(ROUNDS1NAME));
+		Achievements.Add(ROUNDS2NAME, FAchievement(ROUNDS2NAME));
+		Achievements.Add(ROUNDS3NAME, FAchievement(ROUNDS3NAME));
+		Achievements.Add(ROUNDS4NAME, FAchievement(ROUNDS4NAME));
 
-	//Other Achievements
-	Achievements.Add(MAZE1NAME, FAchievement(MAZE1NAME));
+		//Other Achievements
+		Achievements.Add(MAZE1NAME, FAchievement(MAZE1NAME));
+	}
 }
 
 void UAchievementsManager::UpdateAchievements(const FCubeTDStats &Stats, uint8 Type)
@@ -84,6 +95,15 @@ void UAchievementsManager::UpdateAchievements(const FCubeTDStats &Stats, uint8 T
 	if (Type == OTHER || Type == ALL) {
 		UpdateAchievementProgression(MAZE1NAME, MAZE1NUM, Stats.MazeLenght);
 	}
+}
+
+void UAchievementsManager::BeginDestroy()
+{
+	Super::BeginDestroy();
+
+	UCubeTDSaveGame* SaveGameInstance = Cast<UCubeTDSaveGame>(UGameplayStatics::CreateSaveGameObject(UCubeTDSaveGame::StaticClass()));
+	SaveGameInstance->Achievements = Achievements;
+	UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SaveSlotName, SaveGameInstance->UserIndex);
 }
 
 void UAchievementsManager::UpdateAchievementProgression(const FString Name, const float Threshold, const float Value)
