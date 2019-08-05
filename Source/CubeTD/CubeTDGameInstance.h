@@ -21,7 +21,17 @@ public:
 	UCubeTDGameInstance();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UAchievementsManager* AchievementeManager;
+	UAchievementsManager* AchievementsManager;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<FCubeTDStats> Stats;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<FString> Names;
 	
+	void CleanStats();
+	virtual void BeginDestroy() override;
+
+	UFUNCTION(BlueprintCallable)
+	void EraseGameSlot();
 };

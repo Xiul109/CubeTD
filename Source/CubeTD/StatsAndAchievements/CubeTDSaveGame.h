@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 
 #include "Achievement.h"
+#include "CubeTDStats.h"
 
 #include "GameFramework/SaveGame.h"
 #include "CubeTDSaveGame.generated.h"
@@ -22,10 +23,16 @@ public:
 	FString SaveSlotName;
 
 	UPROPERTY(VisibleAnywhere, Category = Basic)
+	uint32 UserIndex;
+
+	UPROPERTY(VisibleAnywhere, Category = Achievements)
 	TMap<FString, FAchievement> Achievements;
 
-	UPROPERTY(VisibleAnywhere, Category = Basic)
-	uint32 UserIndex;
-	
+	UPROPERTY(VisibleAnywhere, Category = Stats)
+	TArray<FCubeTDStats> Stats;
+
+	UPROPERTY(VisibleAnywhere, Category = Stats)
+	TArray<FString> Names;
+
 	UCubeTDSaveGame();
 };

@@ -35,9 +35,10 @@ UAchievementsManager::UAchievementsManager() {
 	UCubeTDSaveGame* LoadGameInstance = Cast<UCubeTDSaveGame>(UGameplayStatics::CreateSaveGameObject(UCubeTDSaveGame::StaticClass()));
 	LoadGameInstance = Cast<UCubeTDSaveGame>(UGameplayStatics::LoadGameFromSlot(LoadGameInstance->SaveSlotName, LoadGameInstance->UserIndex));
 	
-	if(IsValid(LoadGameInstance))
+	if (IsValid(LoadGameInstance)) {
 		Achievements = LoadGameInstance->Achievements;
-	else{
+	}
+	if(Achievements.Num()==0){
 		//Hard coded Achievements... sorry
 		//Enemies Achievements
 		Achievements.Add(ENEMIES1NAME, FAchievement(ENEMIES1NAME));
@@ -97,13 +98,10 @@ void UAchievementsManager::UpdateAchievements(const FCubeTDStats &Stats, uint8 T
 	}
 }
 
-void UAchievementsManager::BeginDestroy()
-{
-	Super::BeginDestroy();
 
-	UCubeTDSaveGame* SaveGameInstance = Cast<UCubeTDSaveGame>(UGameplayStatics::CreateSaveGameObject(UCubeTDSaveGame::StaticClass()));
-	SaveGameInstance->Achievements = Achievements;
-	UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SaveSlotName, SaveGameInstance->UserIndex);
+void UAchievementsManager::CleanAchievements()
+{
+	Achievements.Empty();
 }
 
 void UAchievementsManager::UpdateAchievementProgression(const FString Name, const float Threshold, const float Value)

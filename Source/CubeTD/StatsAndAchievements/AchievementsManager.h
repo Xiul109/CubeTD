@@ -34,7 +34,8 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FAchievementDelegate OnAchievementObtained;
 
-	virtual void BeginDestroy() override;
+public:
+	void CleanAchievements();
 
 protected:
 	void UpdateAchievementProgression(const FString Name, const float Threshold, const float Value);

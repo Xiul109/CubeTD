@@ -11,5 +11,5 @@ ACubeTDGameStateBase::ACubeTDGameStateBase() : Resources(25) {
 void ACubeTDGameStateBase::BeginPlay()
 {
 	UCubeTDGameInstance* GI = Cast<UCubeTDGameInstance>(GetGameInstance());
-	StatsManager->SetAchievementsManagerRef(GI->AchievementeManager);
+	StatsManager->SetAchievementsManagerRef(GI->AchievementsManager);
 }
