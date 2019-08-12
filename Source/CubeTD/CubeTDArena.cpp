@@ -46,12 +46,6 @@ void ACubeTDArena::BeginPlay()
 
 	auto World = GetWorld();
 	if (World) {
-
-		if (SpawnerClass)
-			OriginBox->Structure = World->SpawnActor<ABasicStructure>(SpawnerClass, OriginBox->GetActorTransform());
-		if(NexusClass)
-			DestinationBox->Structure = World->SpawnActor<ABasicStructure>(NexusClass, DestinationBox->GetActorTransform());
-
 		if (SpawnerClass) {
 			OriginBox->Structure = Spawner = World->SpawnActor<ASpawner>(SpawnerClass, OriginBox->GetActorTransform());
 			Spawner->SetSplineRef(EnemiesPath);
@@ -59,7 +53,6 @@ void ACubeTDArena::BeginPlay()
 		}
 		if(NexusClass)
 			DestinationBox->Structure = Nexus	= World->SpawnActor<ANexus>(NexusClass, DestinationBox->GetActorTransform());
-
 	}
 
 	//Box Update Delegates
