@@ -21,7 +21,6 @@ void AExplosiveProjectile::CalculateExplosion()
 	TArray<AActor*> Enemies;
 	ExplosionCollision->GetOverlappingActors(Enemies, ABaseEnemy::StaticClass());
 	for (AActor* enemy : Enemies) {
-		//Llamar evento takedamage del enemigo
 		class ABaseEnemy* CurrentEnemy = Cast<ABaseEnemy>(enemy);
 		CurrentEnemy->TakeDamage(damage);
 	}

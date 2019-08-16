@@ -40,4 +40,7 @@ public:
 			int32 OtherBodyIndex,
 			bool bFromSweep,
 			const FHitResult &SweepResult);
+
+	UFUNCTION(BlueprintCallable)
+		void SetCooldown(float cd);
 };

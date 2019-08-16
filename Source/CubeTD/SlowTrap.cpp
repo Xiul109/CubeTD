@@ -5,11 +5,6 @@
 
 ASlowTrap::ASlowTrap()
 {
-	Navigable = true;
-	Activated = false;
-	PrimaryActorTick.bCanEverTick = true;
-	CollisionComp = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionComp"));
-	CollisionComp->AttachToComponent(Mesh, FAttachmentTransformRules::KeepRelativeTransform);
 	CollisionComp->OnComponentBeginOverlap.AddDynamic(this, &ASlowTrap::BeginOverlap);
 	CollisionComp->OnComponentEndOverlap.AddDynamic(this, &ASlowTrap::OverlapEnd);
 }

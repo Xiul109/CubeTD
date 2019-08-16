@@ -55,12 +55,14 @@ void ACubeTDBox::BuildStructure(int option)
 	switch (option)
 	{
 	case 0:
-		
 		ToSpawn = BasicTowerClass;
 		NeedsUpdate = true;
 		break;
 	case 1:
 		ToSpawn = SlowTrapClass;
+		break;
+	case 2:
+		ToSpawn = ExplosiveTrapClass;
 		break;
 	default:
 		break;

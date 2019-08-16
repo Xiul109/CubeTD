@@ -3,29 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BasicStructure.h"
-#include "Engine.h"
-#include "Enemies/BaseEnemy.h"
+#include "BaseTrap.h"
 #include "SlowTrap.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CUBETD_API ASlowTrap : public ABasicStructure
+class CUBETD_API ASlowTrap : public ABaseTrap
 {
 	GENERATED_BODY()
 	
 public:
 	ASlowTrap();
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Collision")
-		class UBoxComponent* CollisionComp;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Settings")
-	float Durability;
-	float AccumulatedDeltaTime;
-	bool Activated;
 
 public:
 	// Called every frame

@@ -47,6 +47,8 @@ public:
 		TSubclassOf<ABasicStructure> AoeTowerClass;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
 		TSubclassOf<ABasicStructure> SlowTrapClass;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
+		TSubclassOf<ABasicStructure> ExplosiveTrapClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "HUD")
 		TSubclassOf<UUserWidget> BuildHudClass;
