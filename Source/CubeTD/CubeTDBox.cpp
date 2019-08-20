@@ -2,7 +2,7 @@
 
 #include "CubeTDBox.h"
 
-#include "CubeTDGameStateBase.h"
+
 #include "Engine/World.h"
 #include "Components/InputComponent.h"
 

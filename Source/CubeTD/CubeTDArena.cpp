@@ -271,3 +271,15 @@ void ACubeTDArena::SetBoxesEnabled(bool Enabled)
 	}
 }
 
+bool ACubeTDArena::UsePowerUp(float cost)
+{
+	bool ret=false;
+	auto World = GetWorld();
+	auto GameState = World->GetGameState<ACubeTDGameStateBase>();
+	if (GameState->Resources >= cost) {
+		GameState->Resources -= cost;
+		ret = true;
+	}
+	return ret;
+}
+

@@ -124,4 +124,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetBoxesEnabled(bool Enabled);
+
+	UFUNCTION(BlueprintCallable)
+	bool UsePowerUp(float cost);
 };

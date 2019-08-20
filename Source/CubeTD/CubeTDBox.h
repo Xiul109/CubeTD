@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "BasicStructure.h"
 #include "Blueprint/UserWidget.h"
+#include "CubeTDGameStateBase.h"
 #include "CubeTDBox.generated.h"
 
 
