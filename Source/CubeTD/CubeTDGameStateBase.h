@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameStateBase.h"
+
+#include "StatsAndAchievements/StatsManager.h"
+
 #include "CubeTDGameStateBase.generated.h"
 
 /**
@@ -19,5 +22,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Economy")
 	int Resources;
-	
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UStatsManager* StatsManager;
+
+private:
+	void BeginPlay() override;
 };

@@ -21,10 +21,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool Navigable;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "StructureDamage")
 	float ProjectileDamage;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "StructureDamage")
-		float ProjectileDamageUpgrade;
+	float ProjectileDamageUpgrade;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Name")
 	FString Name;
 
@@ -36,6 +38,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "StructureDamage")
 	int Level;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -54,6 +57,7 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Economy")
 		virtual int CalcUpgradeCost();
+
 	UFUNCTION(BlueprintCallable)
-		int GetLevel();
+	int GetLevel();
 };

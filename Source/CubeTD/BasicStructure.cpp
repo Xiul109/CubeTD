@@ -52,8 +52,8 @@ int ABasicStructure::CalcUpgradeCost()
 	return UpgradeCost;
 }
 
+
 int ABasicStructure::GetLevel()
 {
 	return Level;
 }
-
