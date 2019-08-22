@@ -20,6 +20,7 @@ class CUBETD_API ASpawner : public ABasicStructure
 
 public:
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FRoundFinishedDelegate);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEnemyDropDelegate, int, Reward);
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -28,8 +29,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int Round;
 
+	//Delegates
 	UPROPERTY(BlueprintAssignable)
 	FRoundFinishedDelegate OnRoundFinished;
+	UPROPERTY(BlueprintAssignable)
+	FEnemyDropDelegate OnEnemyDrop; //Used to inform the arena that an enemy has drop a reward
 
 protected:
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))

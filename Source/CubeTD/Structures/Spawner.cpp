@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Spawner.h"
+#include "CubeTDGameStateBase.h"
 
 #include "Engine/World.h"
 #include "Engine/Public/TimerManager.h"
@@ -56,6 +57,18 @@ void ASpawner::SpawnNextEnemy()
 void ASpawner::OnEnemyDestroyed(AActor * Actor)
 {
 	EnemyCount--;
+	ABaseEnemy* Enemy = Cast<ABaseEnemy>(Actor);
+
+	if (Enemy && !Enemy->CancelReward) {
+		OnEnemyDrop.Broadcast(Enemy->Reward);
+		
+		auto World = GetWorld();
+		if (World) {
+			auto GameState = World->GetGameState<ACubeTDGameStateBase>();
+			GameState->Resources += Enemy->Reward;
+		}
+	}
+
 	if (EnemyCount <= 0)
 		OnRoundFinished.Broadcast();
 }

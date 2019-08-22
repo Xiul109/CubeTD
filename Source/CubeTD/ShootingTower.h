@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BasicTower.h"
-#include "Projectile.h"
+#include "BaseProjectile.h"
 #include "ShootingTower.generated.h"
 
 
@@ -20,7 +20,19 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Collision")
 		class USphereComponent* CollisionComp;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Turret Projectiles")
+		TSubclassOf<class ABaseProjectile> ProjectileClass;
 
+	UPROPERTY(EditAnywhere)
+		ABaseEnemy* Target;
+	
+	float CoolDown;
+	float AccumulatedDeltaTime;
+
+public:
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 	UFUNCTION()
 		void BeginOverlap(UPrimitiveComponent* OverlappedComponent,
 			AActor* OtherActor,
@@ -29,18 +41,6 @@ public:
 			bool bFromSweep,
 			const FHitResult &SweepResult);
 
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Turret Projectiles")
-		TSubclassOf<class AProjectile> ProjectileClass;
-
-	UPROPERTY(EditAnywhere)
-		ASplineFollower* Target;
-	
-	float CoolDown;
-	float AccumulatedDeltaTime;
-
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+	UFUNCTION(BlueprintCallable)
+		void SetCooldown(float cd);
 };

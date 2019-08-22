@@ -11,15 +11,19 @@ AShootingTower::AShootingTower()
 	CollisionComp->SetSphereRadius(240);
 	CollisionComp->AttachToComponent(Mesh, FAttachmentTransformRules::KeepRelativeTransform);
 	CollisionComp->OnComponentBeginOverlap.AddDynamic(this, &AShootingTower::BeginOverlap);
-	CoolDown = 4.f;
+	CoolDown = 3.f;
 }
 
 void AShootingTower::BeginOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	ASplineFollower* ActorCol= Cast<ASplineFollower>(OtherActor);
+	ABaseEnemy* ActorCol= Cast<ABaseEnemy>(OtherActor);
 	if (ActorCol != nullptr) {
 		Target = ActorCol;
 	}
+}
+void AShootingTower::SetCooldown(float cd)
+{
+	CoolDown = cd;
 }
 void AShootingTower::Tick(float DeltaTime)
 {
@@ -38,10 +42,8 @@ void AShootingTower::Tick(float DeltaTime)
 					spawnParams.Owner = this;
 					spawnParams.Instigator = Instigator;
 
-					AProjectile* FiredProjectile = World->SpawnActor<AProjectile>(ProjectileClass, currentPos, currentRot, spawnParams);
-
-					//AProjectile* FiredProjectile = World->SpawnActor<AProjectile>(ProjectileClass);
-
+					ABaseProjectile* FiredProjectile = World->SpawnActorDeferred<ABaseProjectile>(ProjectileClass, FTransform::Identity);
+					
 					if (FiredProjectile != nullptr)
 					{
 						FRotator meshRot = FiredProjectile->ProjectileMesh->GetComponentRotation();
@@ -51,7 +53,14 @@ void AShootingTower::Tick(float DeltaTime)
 						FiredProjectile->ProjectileMesh->SetRelativeRotation(meshRot);
 						FiredProjectile->Target = Target;
 						AccumulatedDeltaTime = 0.0f;
+
+						FTransform params;
+						params.SetLocation(currentPos);
+						//params.SetRotation(currentRot);
+						FiredProjectile->damage = this->ProjectileDamage;
+						FiredProjectile->FinishSpawning(params);
 					}
+					
 				}
 			
 		

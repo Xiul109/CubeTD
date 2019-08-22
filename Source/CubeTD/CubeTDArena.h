@@ -38,7 +38,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UCameraComponent* Camera;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UStaticMeshComponent* MainMesh;
+	UStaticMeshComponent* GroundMesh;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	USplineComponent* EnemiesPath;
 
@@ -55,9 +55,9 @@ public:
 	UArenaData* ArenaData;
 
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arena Settings")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
 	FIntVector Origin;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arena Settings")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
 	FIntVector Destination;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
@@ -65,8 +65,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
 	TSubclassOf<ANexus> NexusClass;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	int Rounds;	//	->	This counter starts at 1 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arena Settings")
 	TArray<UDataTable*> RoundsSpawnsData;
 
@@ -82,8 +80,13 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FBasicDelegate OnPathBlocked;
 	UPROPERTY(BlueprintAssignable)
+	FBasicDelegate OnNotEnoughResources;
+	UPROPERTY(BlueprintAssignable)
 	FBasicDelegate OnRoundFinished;
-
+	UPROPERTY(BlueprintAssignable)
+	FBasicDelegate OnPathUpdated;
+	UPROPERTY(BlueprintAssignable)
+	FBasicDelegate OnTowerBuiltOrUpgraded;
 
 protected:
 	// Called when the game starts or when spawned
@@ -103,6 +106,8 @@ protected:
 	void BoxSelected(ACubeTDBox* Box);
 	UFUNCTION()
 	void BoxDeselected(ACubeTDBox* Box);
+	UFUNCTION()
+	void TowerChanged(ACubeTDBox* Box);
 	UFUNCTION()
 	void RoundFinished();
 
@@ -124,4 +129,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetBoxesEnabled(bool Enabled);
+
+	UFUNCTION(BlueprintCallable)
+	bool UsePowerUp(float cost);
 };

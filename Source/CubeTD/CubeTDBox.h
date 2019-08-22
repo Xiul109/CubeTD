@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "BasicStructure.h"
 #include "Blueprint/UserWidget.h"
+#include "CubeTDGameStateBase.h"
 #include "CubeTDBox.generated.h"
 
 
@@ -16,7 +17,7 @@ class CUBETD_API ACubeTDBox : public AActor
 {
 	GENERATED_BODY()
 
-		DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBoxDelegate, ACubeTDBox*, Box);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FBoxDelegate, ACubeTDBox*, Box);
 
 public:
 	// Sets default values for this actor's properties
@@ -45,6 +46,10 @@ public:
 		TSubclassOf<ABasicStructure> ShootingTowerClass;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
 		TSubclassOf<ABasicStructure> AoeTowerClass;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
+		TSubclassOf<ABasicStructure> SlowTrapClass;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Arena Settings")
+		TSubclassOf<ABasicStructure> ExplosiveTrapClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "HUD")
 		TSubclassOf<UUserWidget> BuildHudClass;
@@ -52,6 +57,8 @@ public:
 		TSubclassOf<UUserWidget> UpgradeTowerHudClass;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "HUD")
 		TSubclassOf<UUserWidget> UpgradeTowerStatsHudClass;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "HUD")
+		TSubclassOf<UUserWidget> TrapStatsHudClass;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		class UUserWidget* CurrentWidget;
 
@@ -67,8 +74,15 @@ public:
 
 	//Delegates
 	FBoxDelegate OnBoxPreUpdated;
+
 	FBoxDelegate OnBoxSelected;
 	FBoxDelegate OnBoxDeselected;
+
+	FBoxDelegate OnNotEnoughResources;
+
+
+	FBoxDelegate OnTowerChange;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -81,9 +95,10 @@ protected:
 		void OnEndMouseOver(UPrimitiveComponent* TouchedComponent);
 	UFUNCTION()
 		void OnMouseClicked(UPrimitiveComponent* TouchedComponent, FKey Key);
+
+
 	//Hidden attributes
 	bool NeedsUpdate;
-
 
 public:
 	// Called every frame
@@ -95,7 +110,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DestroyStructure();
 	UFUNCTION(BlueprintCallable)
-	void BuildStructure();
+	void BuildStructure(int option);
 
 	UFUNCTION(BlueprintCallable)
 	void UpgradeStructure(int option);
