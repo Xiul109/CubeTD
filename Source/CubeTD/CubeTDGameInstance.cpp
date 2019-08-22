@@ -35,8 +35,11 @@ void UCubeTDGameInstance::BeginDestroy()
 	UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SaveSlotName, SaveGameInstance->UserIndex);
 }
 
-void UCubeTDGameInstance::EraseGameSlot()
+void UCubeTDGameInstance::EraseGameData()
 {
 	UCubeTDSaveGame* SaveGameInstance = Cast<UCubeTDSaveGame>(UGameplayStatics::CreateSaveGameObject(UCubeTDSaveGame::StaticClass()));
 	UGameplayStatics::DeleteGameInSlot(SaveGameInstance->SaveSlotName, SaveGameInstance->UserIndex);
+
+	CleanStats();
+	AchievementsManager->ResetAchievements();
 }

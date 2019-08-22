@@ -39,32 +39,7 @@ UAchievementsManager::UAchievementsManager() {
 		Achievements = LoadGameInstance->Achievements;
 	}
 	if(Achievements.Num()==0){
-		//Hard coded Achievements... sorry
-		//Enemies Achievements
-		Achievements.Add(ENEMIES1NAME, FAchievement(ENEMIES1NAME));
-		Achievements.Add(ENEMIES2NAME, FAchievement(ENEMIES2NAME));
-		Achievements.Add(ENEMIES3NAME, FAchievement(ENEMIES3NAME));
-		Achievements.Add(ENEMIES4NAME, FAchievement(ENEMIES4NAME));
-
-		//Towers Achievements
-		Achievements.Add(TOWERS1NAME, FAchievement(TOWERS1NAME));
-		Achievements.Add(TOWERS2NAME, FAchievement(TOWERS2NAME));
-		Achievements.Add(TOWERS3NAME, FAchievement(TOWERS3NAME));
-		Achievements.Add(TOWERS4NAME, FAchievement(TOWERS4NAME));
-
-		//Resources Achievements
-		Achievements.Add(RESOURCES1NAME, FAchievement(RESOURCES1NAME));
-		Achievements.Add(RESOURCES2NAME, FAchievement(RESOURCES2NAME));
-		Achievements.Add(RESOURCES3NAME, FAchievement(RESOURCES3NAME));
-
-		//Rounds Achievements
-		Achievements.Add(ROUNDS1NAME, FAchievement(ROUNDS1NAME));
-		Achievements.Add(ROUNDS2NAME, FAchievement(ROUNDS2NAME));
-		Achievements.Add(ROUNDS3NAME, FAchievement(ROUNDS3NAME));
-		Achievements.Add(ROUNDS4NAME, FAchievement(ROUNDS4NAME));
-
-		//Other Achievements
-		Achievements.Add(MAZE1NAME, FAchievement(MAZE1NAME));
+		CreateAchievements();
 	}
 }
 
@@ -104,6 +79,12 @@ void UAchievementsManager::CleanAchievements()
 	Achievements.Empty();
 }
 
+void UAchievementsManager::ResetAchievements()
+{
+	CleanAchievements();
+	CreateAchievements();
+}
+
 void UAchievementsManager::UpdateAchievementProgression(const FString Name, const float Threshold, const float Value)
 {
 	auto Achievement = Achievements.Find(Name);
@@ -117,4 +98,34 @@ void UAchievementsManager::UpdateAchievementProgression(const FString Name, cons
 			Achievement->Progression = Value / Threshold;
 		}
 	}
+}
+
+void UAchievementsManager::CreateAchievements()
+{
+	//Hard coded Achievements... sorry
+	//Enemies Achievements
+	Achievements.Add(ENEMIES1NAME, FAchievement(ENEMIES1NAME));
+	Achievements.Add(ENEMIES2NAME, FAchievement(ENEMIES2NAME));
+	Achievements.Add(ENEMIES3NAME, FAchievement(ENEMIES3NAME));
+	Achievements.Add(ENEMIES4NAME, FAchievement(ENEMIES4NAME));
+
+	//Towers Achievements
+	Achievements.Add(TOWERS1NAME, FAchievement(TOWERS1NAME));
+	Achievements.Add(TOWERS2NAME, FAchievement(TOWERS2NAME));
+	Achievements.Add(TOWERS3NAME, FAchievement(TOWERS3NAME));
+	Achievements.Add(TOWERS4NAME, FAchievement(TOWERS4NAME));
+
+	//Resources Achievements
+	Achievements.Add(RESOURCES1NAME, FAchievement(RESOURCES1NAME));
+	Achievements.Add(RESOURCES2NAME, FAchievement(RESOURCES2NAME));
+	Achievements.Add(RESOURCES3NAME, FAchievement(RESOURCES3NAME));
+
+	//Rounds Achievements
+	Achievements.Add(ROUNDS1NAME, FAchievement(ROUNDS1NAME));
+	Achievements.Add(ROUNDS2NAME, FAchievement(ROUNDS2NAME));
+	Achievements.Add(ROUNDS3NAME, FAchievement(ROUNDS3NAME));
+	Achievements.Add(ROUNDS4NAME, FAchievement(ROUNDS4NAME));
+
+	//Other Achievements
+	Achievements.Add(MAZE1NAME, FAchievement(MAZE1NAME));
 }
