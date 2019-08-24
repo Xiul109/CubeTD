@@ -33,5 +33,5 @@ public:
 	virtual void BeginDestroy() override;
 
 	UFUNCTION(BlueprintCallable)
-	void EraseGameSlot();
+	void EraseGameData();
 };

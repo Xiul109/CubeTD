@@ -35,8 +35,11 @@ public:
 	FAchievementDelegate OnAchievementObtained;
 
 public:
-	void CleanAchievements();
+	void ResetAchievements();
 
 protected:
 	void UpdateAchievementProgression(const FString Name, const float Threshold, const float Value);
+
+	void CleanAchievements();
+	void CreateAchievements();
 };
