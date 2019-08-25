@@ -246,7 +246,7 @@ void ACubeTDBox::OnMouseClicked(UPrimitiveComponent * TouchedComponent, FKey key
 		if (!Selected) {
 			Select();
 		}
-		if (Structure == nullptr && BuildHudClass != nullptr) {
+		if (!IsValid(Structure) && BuildHudClass != nullptr) {
 			CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), BuildHudClass);
 			if (CurrentWidget != nullptr) {
 				CurrentWidget->AddToViewport();
