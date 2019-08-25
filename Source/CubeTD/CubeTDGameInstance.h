@@ -28,10 +28,16 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TArray<FString> Names;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float CurrentVolume;
 	
 	void CleanStats();
 	virtual void BeginDestroy() override;
 
 	UFUNCTION(BlueprintCallable)
 	void EraseGameData();
+
+	UFUNCTION(BlueprintCallable)
+		void SetVolume(float Volume);
 };
