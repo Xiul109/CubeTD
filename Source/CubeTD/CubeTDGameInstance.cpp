@@ -24,9 +24,9 @@ void UCubeTDGameInstance::CleanStats()
 	Names.Empty();
 }
 
-void UCubeTDGameInstance::BeginDestroy()
+void UCubeTDGameInstance::Shutdown()
 {
-	Super::BeginDestroy();
+	Super::Shutdown();
 
 	UCubeTDSaveGame* SaveGameInstance = Cast<UCubeTDSaveGame>(UGameplayStatics::CreateSaveGameObject(UCubeTDSaveGame::StaticClass()));
 	SaveGameInstance->Stats = Stats;

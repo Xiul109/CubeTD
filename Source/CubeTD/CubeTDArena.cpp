@@ -263,12 +263,12 @@ void ACubeTDArena::StartNewRound()
 void ACubeTDArena::SetBoxesEnabled(bool Enabled)
 {
 	for (auto Pair : ArenaData->Boxes) {
-		if (Pair.Key != Origin && Pair.Key != Destination)
-			Pair.Value->Disable();
-			if(Enabled)
+		if (Pair.Key != Origin && Pair.Key != Destination){
+			if (Enabled)
 				Pair.Value->Enable();
 			else
 				Pair.Value->Disable();
+		}
 	}
 }
 

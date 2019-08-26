@@ -30,7 +30,7 @@ public:
 	TArray<FString> Names;
 	
 	void CleanStats();
-	virtual void BeginDestroy() override;
+	virtual void Shutdown() override;
 
 	UFUNCTION(BlueprintCallable)
 	void EraseGameData();
