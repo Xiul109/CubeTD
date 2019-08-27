@@ -16,6 +16,7 @@ UCubeTDGameInstance::UCubeTDGameInstance() {
 		Stats = LoadGameInstance->Stats;
 		Names = LoadGameInstance->Names;
 	}
+	CurrentVolume = 1;
 }
 
 void UCubeTDGameInstance::CleanStats()
@@ -42,4 +43,9 @@ void UCubeTDGameInstance::EraseGameData()
 
 	CleanStats();
 	AchievementsManager->ResetAchievements();
+}
+
+void UCubeTDGameInstance::SetVolume(float Volume)
+{
+	CurrentVolume = Volume;
 }
