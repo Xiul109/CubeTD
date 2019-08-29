@@ -61,6 +61,7 @@ void ACubeTDArena::BeginPlay()
 		Box.Value->OnBoxSelected.AddDynamic(this, &ACubeTDArena::BoxSelected);
 		Box.Value->OnBoxDeselected.AddDynamic(this, &ACubeTDArena::BoxDeselected);
 		Box.Value->OnTowerChange.AddDynamic(this, &ACubeTDArena::TowerChanged);
+		Box.Value->OnNotEnoughResources.AddDynamic(this, &ACubeTDArena::NotEnoughtResources);
 	}
 }
 
@@ -161,6 +162,11 @@ void ACubeTDArena::RoundFinished()
 {
 	OnRoundFinished.Broadcast();
 	SetBoxesEnabled(true);
+}
+
+void ACubeTDArena::NotEnoughtResources(ACubeTDBox * Box)
+{
+	OnNotEnoughResources.Broadcast();
 }
 
 
