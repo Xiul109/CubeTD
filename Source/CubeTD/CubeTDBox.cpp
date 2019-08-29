@@ -1,8 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "CubeTDBox.h"
-
-
 #include "CubeTDGameStateBase.h"
 
 #include "Engine/World.h"
@@ -26,6 +24,8 @@ ACubeTDBox::ACubeTDBox() : Interactionable(true), Selected(false), NeedsUpdate(f
 	Mesh->OnBeginCursorOver.AddDynamic(this, &ACubeTDBox::OnBeginMouseOver);
 	Mesh->OnEndCursorOver.AddDynamic(this, &ACubeTDBox::OnEndMouseOver);
 	Mesh->OnClicked.AddDynamic(this, &ACubeTDBox::OnMouseClicked);
+
+
 
 }
 
@@ -246,7 +246,7 @@ void ACubeTDBox::OnMouseClicked(UPrimitiveComponent * TouchedComponent, FKey key
 		if (!Selected) {
 			Select();
 		}
-		if (Structure == nullptr && BuildHudClass != nullptr) {
+		if (!IsValid(Structure) && BuildHudClass != nullptr) {
 			CurrentWidget = CreateWidget<UUserWidget>(GetWorld(), BuildHudClass);
 			if (CurrentWidget != nullptr) {
 				CurrentWidget->AddToViewport();

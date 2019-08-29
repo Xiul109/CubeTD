@@ -31,9 +31,20 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float CurrentVolume;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float BaseTCost;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float ShootingTCost;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float AoETCost;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float SlowTCost;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float ExplTCost;
 	
 	void CleanStats();
-	virtual void BeginDestroy() override;
+	virtual void Shutdown() override;
 
 	UFUNCTION(BlueprintCallable)
 	void EraseGameData();

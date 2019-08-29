@@ -11,7 +11,7 @@ AShootingTower::AShootingTower()
 	CollisionComp->SetSphereRadius(240);
 	CollisionComp->AttachToComponent(Mesh, FAttachmentTransformRules::KeepRelativeTransform);
 	CollisionComp->OnComponentBeginOverlap.AddDynamic(this, &AShootingTower::BeginOverlap);
-	CoolDown = 3.f;
+	CoolDown = 1.f;
 }
 
 void AShootingTower::BeginOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)

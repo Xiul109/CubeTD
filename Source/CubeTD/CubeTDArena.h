@@ -110,6 +110,8 @@ protected:
 	void TowerChanged(ACubeTDBox* Box);
 	UFUNCTION()
 	void RoundFinished();
+	UFUNCTION()
+	void NotEnoughtResources(ACubeTDBox* Box);
 
 public:	
 	// Called every frame
