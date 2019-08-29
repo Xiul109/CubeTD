@@ -23,13 +23,9 @@ public:
 		, TimeBetweenSpawns(0)
 	{}
 
-	/** The 'Name' column is the same as the XP Level */
-
-	/** XP to get to the given level from the previous level */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wave Info")
 	int32 NumberOfEnemies;
 
-	/** Extra HitPoints gained at this level */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Wave Info")
 	float TimeBetweenSpawns;
 
