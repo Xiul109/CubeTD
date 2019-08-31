@@ -32,6 +32,7 @@ void ANexus::BeginOverlap(AActor * OverlappedActor, AActor * OtherActor)
 			DivisibleEnemy->SubdivisionsLeft = 0;
 
 		Enemy->CancelReward = true;
+		Enemy->dead = true;
 		Enemy->Destroy();
 	}
 }

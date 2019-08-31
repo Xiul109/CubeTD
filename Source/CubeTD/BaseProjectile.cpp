@@ -43,16 +43,14 @@ void ABaseProjectile::Tick(float DeltaTime)
 }
 
 void ABaseProjectile::FindTarget() {
-	if (Target != NULL)
+	if (Target != NULL && !Target->dead)
 	{
-		if (Target->IsValidLowLevel())
-		{
 			FVector wantedDir = (Target->GetActorLocation() - GetActorLocation());
 			wantedDir += Target->GetVelocity() * wantedDir.Size() / 200.f;
 			ProjectileMovement->Velocity = wantedDir * 200.f;
 			ProjectileMovement->Velocity = ProjectileMovement->Velocity.GetSafeNormal() * 200.f;
 			ProjectileMovement->UpdateComponentVelocity();
-		}
+		
 	}
 	else {
 		Explode();

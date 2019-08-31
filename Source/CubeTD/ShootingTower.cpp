@@ -10,28 +10,36 @@ AShootingTower::AShootingTower()
 	CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionComp"));
 	CollisionComp->SetSphereRadius(240);
 	CollisionComp->AttachToComponent(Mesh, FAttachmentTransformRules::KeepRelativeTransform);
-	CollisionComp->OnComponentBeginOverlap.AddDynamic(this, &AShootingTower::BeginOverlap);
-	CoolDown = 1.f;
 }
 
-void AShootingTower::BeginOverlap(UPrimitiveComponent * OverlappedComponent, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
-{
-	ABaseEnemy* ActorCol= Cast<ABaseEnemy>(OtherActor);
-	if (ActorCol != nullptr) {
-		Target = ActorCol;
-	}
-}
 void AShootingTower::SetCooldown(float cd)
 {
 	CoolDown = cd;
+}
+void AShootingTower::SearchTarget()
+{
+	TArray<AActor*> Enemies;
+	CollisionComp->GetOverlappingActors(Enemies, ABaseEnemy::StaticClass());
+	if (Enemies.Num() > 0) {
+		bool validEnemy = false;
+		ABaseEnemy* tmp;
+		while (!validEnemy && Enemies.Num()>0) {
+			tmp = Cast<ABaseEnemy>(Enemies.Pop());
+			if(!tmp->dead){
+				validEnemy = true;
+				Target = tmp;
+			}
+		}
+	}
 }
 void AShootingTower::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 	AccumulatedDeltaTime += DeltaTime;
-	if (Target != nullptr && AccumulatedDeltaTime >= CoolDown) {
-		
+	if (AccumulatedDeltaTime >= CoolDown) {
+		if (Target != nullptr) {
+			if (!Target->dead) {
 				auto World = GetWorld();
 				if (World != NULL)
 				{
@@ -43,7 +51,7 @@ void AShootingTower::Tick(float DeltaTime)
 					spawnParams.Instigator = Instigator;
 
 					ABaseProjectile* FiredProjectile = World->SpawnActorDeferred<ABaseProjectile>(ProjectileClass, FTransform::Identity);
-					
+
 					if (FiredProjectile != nullptr)
 					{
 						FRotator meshRot = FiredProjectile->ProjectileMesh->GetComponentRotation();
@@ -60,13 +68,18 @@ void AShootingTower::Tick(float DeltaTime)
 						FiredProjectile->damage = this->ProjectileDamage;
 						FiredProjectile->FinishSpawning(params);
 					}
-					
+
 				}
-			
-		
+
+
+			}
+			else {
+				//Clear target
+				Target = nullptr;
+			}
+		}
 		else {
-			//Clear target
-			Target = nullptr;
+			SearchTarget();
 		}
 	}
 }

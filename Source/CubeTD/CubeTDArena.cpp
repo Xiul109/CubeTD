@@ -66,14 +66,19 @@ void ACubeTDArena::BeginPlay()
 	auto GameInstance = World->GetGameInstance<UCubeTDGameInstance>();
 	ABasicStructure* tmp = World->SpawnActorDeferred<ABasicStructure>(OriginBox->ShootingTowerClass, FTransform::Identity);
 	GameInstance->ShootingTCost = tmp->BaseCost;
+	tmp->Destroy();
 	tmp = World->SpawnActorDeferred<ABasicStructure>(OriginBox->AoeTowerClass, FTransform::Identity);
 	GameInstance->AoETCost = tmp->BaseCost;
+	tmp->Destroy();
 	tmp = World->SpawnActorDeferred<ABasicStructure>(OriginBox->SlowTrapClass, FTransform::Identity);
 	GameInstance->SlowTCost = tmp->BaseCost;
+	tmp->Destroy();
 	tmp = World->SpawnActorDeferred<ABasicStructure>(OriginBox->ExplosiveTrapClass, FTransform::Identity);
 	GameInstance->ExplTCost = tmp->BaseCost;
+	tmp->Destroy();
 	tmp = World->SpawnActorDeferred<ABasicStructure>(OriginBox->BasicTowerClass, FTransform::Identity);
 	GameInstance->BaseTCost = tmp->BaseCost;
+	tmp->Destroy();
 	tmp = nullptr;
 }
 

@@ -7,7 +7,7 @@
 AExplosiveTrap::AExplosiveTrap()
 {
 	//Cooldown of the damage event
-	damage = 0.10;
+	damage = 0.15;
 	CollisionComp->OnComponentBeginOverlap.AddDynamic(this, &AExplosiveTrap::BeginOverlap);
 }
 

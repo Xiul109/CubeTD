@@ -11,7 +11,10 @@ void ABaseEnemy::OnConstruction(const FTransform & Transform)
 {
 	Super::OnConstruction(Transform);
 
-	Life = MaxLife;
+	Life = MaxLife-1;
+
+	dead = false;
+
 }
 
 void ABaseEnemy::TakeDamage(float Damage)
@@ -22,6 +25,7 @@ void ABaseEnemy::TakeDamage(float Damage)
 		//If the damage kills enemy, destroy the actor
 		if (Life <= 0.f)
 		{
+			dead = true;
 			Destroy();
 		}
 	}
