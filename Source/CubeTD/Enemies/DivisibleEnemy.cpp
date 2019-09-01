@@ -26,6 +26,7 @@ void ADivisibleEnemy::OnKilled(AActor * Actor)
 			NewEnemy1->Speed = StatChangingRatio * Speed;
 			NewEnemy2->Speed = (2 - StatChangingRatio) * Speed;
 		}
+		OnDivision.Broadcast(NewEnemy1, NewEnemy2);
 	}
 }
 
