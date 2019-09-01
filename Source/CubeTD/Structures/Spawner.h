@@ -3,8 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "BasicStructure.h"
 #include "Enemies/BaseEnemy.h"
+#include "Enemies/DivisibleEnemy.h"
+
 #include "CubeTDRoundTableRow.h"
 #include "Engine/DataTable.h"
 
@@ -64,6 +67,8 @@ protected:
 	void SpawnNextEnemy();
 	UFUNCTION()
 	virtual void OnEnemyDestroyed(AActor* Actor);
+	UFUNCTION()
+	void OnEnemyDivided(ADivisibleEnemy* Child1, ADivisibleEnemy* Child2);
 
 public:
 	UFUNCTION(BlueprintCallable)

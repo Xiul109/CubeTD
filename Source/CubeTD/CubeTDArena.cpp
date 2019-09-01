@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "CubeTDArena.h"
-
+#include "CubeTDGameInstance.h"
 #include "Engine/World.h"
 #include "Components/InputComponent.h"
 
@@ -41,7 +41,6 @@ void ACubeTDArena::BeginPlay()
 	//Prepare Origin and End Boxes
 	ACubeTDBox* OriginBox = *ArenaData->Boxes.Find(Origin);
 	ACubeTDBox* DestinationBox = *ArenaData->Boxes.Find(Destination);
-
 	OriginBox->Disable(); DestinationBox->Disable();
 
 	auto World = GetWorld();
@@ -63,6 +62,24 @@ void ACubeTDArena::BeginPlay()
 		Box.Value->OnTowerChange.AddDynamic(this, &ACubeTDArena::TowerChanged);
 		Box.Value->OnNotEnoughResources.AddDynamic(this, &ACubeTDArena::NotEnoughtResources);
 	}
+
+	auto GameInstance = World->GetGameInstance<UCubeTDGameInstance>();
+	ABasicStructure* tmp = World->SpawnActorDeferred<ABasicStructure>(OriginBox->ShootingTowerClass, FTransform::Identity);
+	GameInstance->ShootingTCost = tmp->BaseCost;
+	tmp->Destroy();
+	tmp = World->SpawnActorDeferred<ABasicStructure>(OriginBox->AoeTowerClass, FTransform::Identity);
+	GameInstance->AoETCost = tmp->BaseCost;
+	tmp->Destroy();
+	tmp = World->SpawnActorDeferred<ABasicStructure>(OriginBox->SlowTrapClass, FTransform::Identity);
+	GameInstance->SlowTCost = tmp->BaseCost;
+	tmp->Destroy();
+	tmp = World->SpawnActorDeferred<ABasicStructure>(OriginBox->ExplosiveTrapClass, FTransform::Identity);
+	GameInstance->ExplTCost = tmp->BaseCost;
+	tmp->Destroy();
+	tmp = World->SpawnActorDeferred<ABasicStructure>(OriginBox->BasicTowerClass, FTransform::Identity);
+	GameInstance->BaseTCost = tmp->BaseCost;
+	tmp->Destroy();
+	tmp = nullptr;
 }
 
 bool ACubeTDArena::UpdatePath()

@@ -32,6 +32,8 @@ public:
 
 	bool CancelReward;
 
+	bool dead;
+
 	virtual void OnConstruction(const FTransform & Transform) override;
 
 	void TakeDamage(float Damage);
