@@ -134,4 +134,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool UsePowerUp(float cost);
+
+	UFUNCTION(BlueprintCallable)
+		UDataTable* GetNextRoundInfo() const;
 };

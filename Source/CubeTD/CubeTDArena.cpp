@@ -277,8 +277,7 @@ ACubeTDBox * ACubeTDArena::GetSelectedBox() const
 void ACubeTDArena::StartNewRound()
 {	
 	if (Spawner) {
-		int NextRoundSpawns = (Spawner->Round + 1) % RoundsSpawnsData.Num();
-		Spawner->ActivateSpawner(RoundsSpawnsData[NextRoundSpawns]);
+		Spawner->ActivateSpawner(GetNextRoundInfo());
 		SetBoxesEnabled(false);
 	}
 }
@@ -305,5 +304,11 @@ bool ACubeTDArena::UsePowerUp(float cost)
 		ret = true;
 	}
 	return ret;
+}
+
+UDataTable * ACubeTDArena::GetNextRoundInfo() const
+{
+	int NextRoundSpawns = (Spawner->Round + 1) % RoundsSpawnsData.Num();
+	return RoundsSpawnsData[NextRoundSpawns];
 }
 
