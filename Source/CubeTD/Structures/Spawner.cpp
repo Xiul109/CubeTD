@@ -46,6 +46,9 @@ void ASpawner::SpawnNextEnemy()
 		Enemy->SplineRef = SplineRef;
 		Enemy->Life += FMath::Pow(LifeIncreasingRate, Round);
 		Enemy->OnDestroyed.AddDynamic(this, &ASpawner::OnEnemyDestroyed);
+
+		if (EnemyClassToSpawn->IsChildOf(ADivisibleEnemy::StaticClass()))
+			Cast<ADivisibleEnemy>(Enemy)->OnDivision.AddDynamic(this, &ASpawner::OnEnemyDivided);
 	}
 
 	SpawnsLeftsInCurrentWave--;
@@ -71,6 +74,16 @@ void ASpawner::OnEnemyDestroyed(AActor * Actor)
 
 	if (EnemyCount <= 0)
 		OnRoundFinished.Broadcast();
+}
+
+void ASpawner::OnEnemyDivided(ADivisibleEnemy * Child1, ADivisibleEnemy * Child2)
+{
+	Child1->OnDivision.AddDynamic(this, &ASpawner::OnEnemyDivided);
+	Child1->OnDestroyed.AddDynamic(this, &ASpawner::OnEnemyDestroyed);
+
+	Child2->OnDivision.AddDynamic(this, &ASpawner::OnEnemyDivided);
+	Child2->OnDestroyed.AddDynamic(this, &ASpawner::OnEnemyDestroyed);
+	EnemyCount += 2;
 }
 
 void ASpawner::ActivateSpawner(UDataTable * NewSpawnInfo)

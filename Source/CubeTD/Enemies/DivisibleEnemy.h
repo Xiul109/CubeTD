@@ -13,6 +13,8 @@ UCLASS()
 class CUBETD_API ADivisibleEnemy : public ABaseEnemy
 {
 	GENERATED_BODY()
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnDivisionDelegate, ADivisibleEnemy*, Child1, ADivisibleEnemy*, Child2);
 	
 public:
 	ADivisibleEnemy();
@@ -22,6 +24,8 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Divisible Enemy")
 	float StatChangingRatio;
+
+	FOnDivisionDelegate OnDivision;
 
 protected:
 	virtual void BeginPlay() override;

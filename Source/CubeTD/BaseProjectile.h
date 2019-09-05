@@ -23,11 +23,10 @@ public:
 		class UStaticMeshComponent* ProjectileMesh;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 		class UProjectileMovementComponent* ProjectileMovement;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FX")
-		class UParticleSystem* ExplosionSystem;
 	UPROPERTY(EditDefaultsOnly, Category = "Sound")
 		class USoundCue* ExplosionSound;
-
+	UPROPERTY(EditDefaultsOnly, Category = "FX")
+		class UParticleSystem* ExplosionSystem;
 	UPROPERTY(EditAnywhere)
 		ABaseEnemy* Target;
 

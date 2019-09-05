@@ -75,10 +75,11 @@ class UParticleSystemComponent* ABaseProjectile::PlayExplosion(class UParticleSy
 
 	return retVal;
 }
-
 void ABaseProjectile::Explode()
 {
-	PlayExplosion(ExplosionSystem);
+	if (ExplosionSystem != nullptr) {
+		PlayExplosion(ExplosionSystem);
+	}
 	PlayExplosionSound(ExplosionSound);
 	if (this->IsValidLowLevel()) {
 		Destroy();

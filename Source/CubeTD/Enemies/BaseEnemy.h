@@ -19,6 +19,9 @@ public:
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base Enemy")
+	FString Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base Enemy")
 	float MaxLife;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Base Enemy")
