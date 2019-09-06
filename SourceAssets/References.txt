@@ -1,3 +1,0 @@
-- Cube Wireframe: 		https://opengameart.org/content/cuboid-wireframes
-- Icon_Logro: 	  		https://opengameart.org/content/uiicons-104x104
--AchievementUnlockedSound:	https://opengameart.org/content/fantasy-sound-effects-library    Spell_00.wav
