@@ -49,6 +49,7 @@ FString ABasicStructure::GetName()
 
 int ABasicStructure::CalcUpgradeCost()
 {
+	UpgradeCost=BaseCost + BaseCost * ((Level-1)*0.2);
 	return UpgradeCost;
 }
 

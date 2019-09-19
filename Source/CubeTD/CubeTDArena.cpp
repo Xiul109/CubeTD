@@ -276,6 +276,9 @@ ACubeTDBox * ACubeTDArena::GetSelectedBox() const
 
 void ACubeTDArena::StartNewRound()
 {	
+	if (SelectedBox != nullptr) {
+		SelectedBox->Deselect();
+	}
 	if (Spawner) {
 		Spawner->ActivateSpawner(GetNextRoundInfo());
 		SetBoxesEnabled(false);

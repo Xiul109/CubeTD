@@ -17,6 +17,7 @@ UCubeTDGameInstance::UCubeTDGameInstance() {
 		Names = LoadGameInstance->Names;
 	}
 	CurrentVolume = 1;
+	CurrentMusicVolume = 1;
 }
 
 void UCubeTDGameInstance::CleanStats()
@@ -48,4 +49,9 @@ void UCubeTDGameInstance::EraseGameData()
 void UCubeTDGameInstance::SetVolume(float Volume)
 {
 	CurrentVolume = Volume;
+}
+
+void UCubeTDGameInstance::SetMusicVolume(float Volume)
+{
+	CurrentMusicVolume = Volume;
 }

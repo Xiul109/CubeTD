@@ -26,7 +26,7 @@ void ASlowTrap::BeginOverlap(UPrimitiveComponent * OverlappedComponent, AActor *
 	ABaseEnemy* ActorCol = Cast<ABaseEnemy>(OtherActor);
 	if (ActorCol != nullptr) {
 		Activated = true;
-		ActorCol->CustomTimeDilation = 0.3;
+		ActorCol->CustomTimeDilation = 0.5;
 	}
 }
 

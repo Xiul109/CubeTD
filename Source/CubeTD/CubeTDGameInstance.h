@@ -31,6 +31,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float CurrentVolume;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float CurrentMusicVolume;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float BaseTCost;
@@ -50,5 +52,7 @@ public:
 	void EraseGameData();
 
 	UFUNCTION(BlueprintCallable)
-		void SetVolume(float Volume);
+	void SetVolume(float Volume);
+	UFUNCTION(BlueprintCallable)
+	void SetMusicVolume(float Volume);
 };

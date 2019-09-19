@@ -126,11 +126,12 @@ void ACubeTDBox::UpgradeStructure(int option)
 void ACubeTDBox::UpgradeTowerStats()
 {
 	auto GameState = GetWorld()->GetGameState<ACubeTDGameStateBase>();
-	int UpgradeCost = Structure->CalcUpgradeCost();
+	int UpgradeCost = Structure->UpgradeCost;
 	if (GameState->Resources >= UpgradeCost) {
 		Structure->ProjectileDamage += Structure->ProjectileDamageUpgrade;
 		Structure->Level += 1;
 		GameState->Resources -= UpgradeCost;
+		Structure->CalcUpgradeCost();
 
 		OnTowerChange.Broadcast(this);
 	}

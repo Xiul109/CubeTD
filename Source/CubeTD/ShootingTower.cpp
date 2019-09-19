@@ -39,7 +39,7 @@ void AShootingTower::Tick(float DeltaTime)
 	AccumulatedDeltaTime += DeltaTime;
 	if (AccumulatedDeltaTime >= CoolDown) {
 		if (Target != nullptr) {
-			if (!Target->dead) {
+			if (!Target->dead && Target->IsOverlappingActor(this)) {
 				auto World = GetWorld();
 				if (World != NULL)
 				{
