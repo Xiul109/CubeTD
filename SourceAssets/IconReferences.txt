@@ -1,0 +1,9 @@
+Los iconos de los botones ahievementes, settings, eliminar estructura y power up están basados en iconos hechos por Freepik de la web flaticon.com.
+
+
+
+El icono del botón Start round esta basado en un icono hecho por Surang de la web flaticon.com.
+
+
+
+El icono del botón Exit game esta basado en un icono hecho por Smashicons de la web flaticon.com.
