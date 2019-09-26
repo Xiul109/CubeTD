@@ -11,10 +11,10 @@ constexpr auto ENEMIES2NAME = "Kill 50 enemies";						constexpr int ENEMIES2NUM 
 constexpr auto ENEMIES3NAME = "Kill 500 enemies";						constexpr int ENEMIES3NUM = 500;
 constexpr auto ENEMIES4NAME = "Kill 5000 enemies";						constexpr int ENEMIES4NUM = 5000;
 
-constexpr auto TOWERS1NAME = "Build your first tower";					constexpr int TOWERS1NUM = 1;
-constexpr auto TOWERS2NAME = "Build 10 towers";							constexpr int TOWERS2NUM = 10;
-constexpr auto TOWERS3NAME = "Build 100 towers";						constexpr int TOWERS3NUM = 100;
-constexpr auto TOWERS4NAME = "Build 1000 towers";						constexpr int TOWERS4NUM = 1000;
+constexpr auto TOWERS1NAME = "Build your first structure";				constexpr int TOWERS1NUM = 1;
+constexpr auto TOWERS2NAME = "Build or upgrade 10 structures";			constexpr int TOWERS2NUM = 10;
+constexpr auto TOWERS3NAME = "Build or upgrade 100 structures";			constexpr int TOWERS3NUM = 100;
+constexpr auto TOWERS4NAME = "Build or upgrade 1000 structures";		constexpr int TOWERS4NUM = 1000;
 
 constexpr auto RESOURCES1NAME = "Have 100 Resources";					constexpr int RESOURCES1NUM = 100;
 constexpr auto RESOURCES2NAME = "Have 1000 Resources";					constexpr int RESOURCES2NUM = 1000;
